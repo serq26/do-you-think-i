@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { useTheme } from "../contexts/ThemeContext";
+import { getAuth } from "firebase/auth";
 
 const navigation = [
   { name: "Home", href: "/", current: true },
@@ -17,6 +18,7 @@ function classNames(...classes) {
 
 export default function Header({userName}) {
   const {theme, setTheme} = useTheme();
+  const authentication = getAuth();
 
   const changeTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
@@ -41,9 +43,11 @@ export default function Header({userName}) {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <span className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-200">
-                    Do You Think I
-                  </span>
+                  <a href="/" title="Do You Think I">
+                    <span className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-200">
+                      Do You Think I
+                    </span>
+                  </a>
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
@@ -66,10 +70,10 @@ export default function Header({userName}) {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <label class="swap swap-rotate mr-2">
+                <label className="swap swap-rotate mr-2">
                   <input type="checkbox" onChange={changeTheme} />
                   <svg
-                    class="swap-on fill-current w-6 h-6"
+                    className="swap-on fill-current w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                   >
@@ -77,7 +81,7 @@ export default function Header({userName}) {
                   </svg>
 
                   <svg
-                    class="swap-off fill-current w-6 h-6"
+                    className="swap-off fill-current w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                   >
@@ -148,6 +152,10 @@ export default function Header({userName}) {
                               active ? "dark:bg-gray-600 bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
                             )}
+                            onClick={() => {
+                              authentication.signOut();
+                              localStorage.removeItem("emailForSignIn");
+                            }}
                           >
                             Sign out
                           </a>

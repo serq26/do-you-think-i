@@ -1,12 +1,16 @@
 import React from "react";
 import { useFormik } from "formik";
 import { loginValidations } from "../validations";
-// import bcrypt from "bcryptjs";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { firestore } from "../firebaseConfig";
+// import { collection, getDocs, query, where } from "firebase/firestore";
+// import { firestore } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
+
+  const {user, setUser } = useAuth();
+
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -17,17 +21,19 @@ export default function Login() {
     loginValidations,
     onSubmit: async (values, bag) => {
       try {
-        let password;
-        const q = query(
-          collection(firestore, "users"),
-          where("email", "==", values.email)
-        );
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          password = doc.data().password;
-        });
-        // const checkLogin = await bcrypt.compare(values.password,password);
-        // checkLogin ? navigate("/") : console.log("Giriş başarısız.!");
+        const auth = getAuth();
+        signInWithEmailAndPassword(auth, values.email, values.password)
+          .then((userCredential) => {
+            // Signed in
+            // const user = userCredential.user;
+            // setUser(userCredential.user);
+            navigate("/");            
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorMessage);
+          });
       } catch (e) {
         console.log(e);
       }
@@ -150,12 +156,8 @@ export default function Login() {
               <div className="flex items-center">
                 <div class="form-control">
                   <label class="label cursor-pointer">
-                    <input
-                      type="checkbox"
-                      class="checkbox checkbox-primary"
-                    />
+                    <input type="checkbox" class="checkbox checkbox-primary" />
                     <span class="label-text ml-2 font-medium">Remember me</span>
-
                   </label>
                 </div>
               </div>
@@ -169,7 +171,7 @@ export default function Login() {
                 </a>
               </div>
             </div>
-            <button className="btn btn-primary block w-full mt-5">Login</button>
+            <button type="submit" className="btn btn-primary w-full mt-5" onClick={(e) => e.target.classList.add("loading")}>Login</button>
           </form>
         </div>
       </div>

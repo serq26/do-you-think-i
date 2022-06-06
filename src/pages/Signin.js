@@ -13,6 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Country, State } from "country-state-city";
+// import bcrypt from "bcryptjs";
 
 export default function Signin() {
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -26,6 +27,13 @@ export default function Signin() {
 
   const countries = Country.getAllCountries();
 
+  
+  // const hashPassword = async (password) => {
+  //   const salt = await bcrypt.genSaltSync(10);
+  //   const hashedPassword = await bcrypt.hash(password,salt);
+  //   return hashedPassword;
+  // }
+
   const registerFirebase = (values) => {
     createUserWithEmailAndPassword(
       authentication,
@@ -33,6 +41,9 @@ export default function Signin() {
       values.password
     )
       .then(async (userCredential) => {
+        // values = {...values, password: await hashPassword(values.password), passwor_confirm: null };
+        delete values.password;
+        delete values.password_confirm;
         const userRef = doc(firestore, "users", userCredential.user.uid);
         await setDoc(userRef, values);
 
@@ -43,16 +54,14 @@ export default function Signin() {
         // authentication.signOut();
 
         sendSignInLinkToEmail(authentication, values.email, actionCodeSettings)
-          .then(() => {
-            // The link was successfully sent. Inform the user.
-            // Save the email locally so you don't need to ask the user for it again
-            // if they open the link on the same device.
+          .then(() => {            
+            setIsComplete(true);
             window.localStorage.setItem("emailForSignIn", values.email);
-            // ...
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log(errorCode +"-"+ errorMessage);
           });
       })
       .catch(alert);
@@ -139,7 +148,7 @@ export default function Signin() {
                       name="password_confirm"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.passwor_confirm}
+                      value={formik.values.password_confirm}
                       placeholder="Password Confirm"
                       className="input input-bordered w-full"
                     />
