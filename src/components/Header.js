@@ -7,7 +7,7 @@ import { getAuth } from "firebase/auth";
 const navigation = [
   { name: "Home", href: "/", current: true },
   { name: "Categories", href: "/categories", current: false },
-  { name: "Craete Question", href: "#", current: false },
+  { name: "Add Question", href: "/add-question", current: false },
   { name: "Login", href: "/login", current: false },
   { name: "Signin", href: "/signin", current: false },
 ];
