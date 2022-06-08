@@ -1,7 +1,10 @@
 import React from 'react'
+import Questions from '../components/Questions'
 
 export default function Home() {
   return (
-    <div style={{height:"80vh"}}>Home</div>
+    <div className='py-20 flex items-center justify-center'>
+      <Questions />
+    </div>
   )
 }

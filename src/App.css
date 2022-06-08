@@ -25,6 +25,12 @@
     align-items: center;
   }
   
+  .swiper-slide img {
+    display: block;
+    width: 900px;
+    height: 400px;
+    object-fit: cover;
+  }
 
   .progress {
     /* @apply bg-gradient-to-r from-teal-500 to-cyan-200; */

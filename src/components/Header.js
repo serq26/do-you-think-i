@@ -95,9 +95,8 @@ export default function Header({userName}) {
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-7 w-7" aria-hidden="true" />
                 </button>
-                <span className="text-white font-medium mx-2">{userName}</span>
                 {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
+                <Menu as="div" className="ml-3 relative z-50">
                   <div>
                     <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                       <span className="sr-only">Open user menu</span>
@@ -164,6 +163,7 @@ export default function Header({userName}) {
                     </Menu.Items>
                   </Transition>
                 </Menu>
+                <span className="text-white font-medium mx-2">{userName}</span>
               </div>
             </div>
           </div>
