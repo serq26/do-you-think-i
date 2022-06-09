@@ -4,6 +4,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { firestore, storage } from "../firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
+import { useTranslation } from "react-i18next";
 
 export default function AddQuestion() {
   const [uploadImage, setUploadImage] = useState(null);
@@ -12,6 +13,7 @@ export default function AddQuestion() {
   const [isUploaded, setIsUploaded] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const types = ["image/png", "image/jpeg"];
+  const {t} = useTranslation();
 
   const initialValues = {
     question: "",
@@ -93,7 +95,7 @@ export default function AddQuestion() {
   return (
     <div className="container mx-auto p-4">
       <div className="w-full md:w-1/2 lg:w-1/3 mx-auto my-12">
-        <h1 className="text-lg font-bold">Add Question</h1>
+        <h1 className="text-lg font-bold">{t("add_question")}</h1>
         {!isComplete ? (
           <Formik
             initialValues={initialValues}
@@ -102,7 +104,6 @@ export default function AddQuestion() {
               values["img"] = imgUrl;
               const docRef = await addDoc(collection(firestore, "questions"), values);
               setIsComplete(true);
-              // alert(JSON.stringify(values, null, 2));
             }}
           >
             {({ values }) => (
@@ -129,11 +130,11 @@ export default function AddQuestion() {
                           ></path>
                         </svg>
                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">Click to upload</span>{" "}
-                          or drag and drop
+                          <span className="font-semibold">{t("file_upload1")}</span>{" "}
+                          {t("or")} {t("file_upload2")}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          SVG, PNG, JPG or GIF (MAX. 800x400px)
+                          SVG, PNG, JPG {t("or")} GIF (MAX. 800x400px)
                         </p>
                       </div>
                     ) : (
@@ -157,7 +158,7 @@ export default function AddQuestion() {
                 <Field
                   type="text"
                   name="question"
-                  placeholder="Write Your Question"
+                  placeholder={t("write_your_question")}
                   className="input input-bordered w-full mb-5"
                 />
                 <FieldArray name="answers">
@@ -170,12 +171,12 @@ export default function AddQuestion() {
                               <Field
                                 type="text"
                                 name={`answers.${index}.answer`}
-                                placeholder={`${index+1}. Answer`}
+                                placeholder={`${index+1}. ${t("answer")}`}
                                 className="input input-bordered w-2/3 mr-4"
                               />
                               <div
                                 className="tooltip tooltip-right"
-                                data-tip="If this answer correct, so clicked it."
+                                data-tip={t("check_true_answer")}
                               >
                                 <Field
                                   type="radio"
@@ -212,7 +213,7 @@ export default function AddQuestion() {
                             : alert("Maximum answer section..!")
                         }
                       >
-                        Add More Answer
+                        {t("add_more_answer")}
                       </button>
                     </div>
                   )}
@@ -222,7 +223,7 @@ export default function AddQuestion() {
                   className="btn btn-accent w-full mt-5"
                   onClick={(e) => e.target.classList.add("loading")}
                 >
-                  Send
+                  {t("send")}
                 </button>
               </Form>
             )}

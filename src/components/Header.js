@@ -3,26 +3,30 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { useTheme } from "../contexts/ThemeContext";
 import { getAuth } from "firebase/auth";
-
-const navigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Categories", href: "/categories", current: false },
-  { name: "Add Question", href: "/add-question", current: false },
-  { name: "Login", href: "/login", current: false },
-  { name: "Signin", href: "/signin", current: false },
-];
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Header({userName}) {
-  const {theme, setTheme} = useTheme();
+export default function Header({ userName, setLocale }) {
+  const { theme, setTheme } = useTheme();
   const authentication = getAuth();
 
+  const { t } = useTranslation();
+
+  const navigation = [
+    { name: t("menu_home"), href: "/", current: true },
+    { name: t("menu_categories"), href: "/categories", current: false },
+    { name: t("menu_addQuestion"), href: "/add-question", current: false },
+    { name: t("menu_login"), href: "/login", current: false },
+    { name: t("menu_signin"), href: "/signin", current: false },
+  ];
+
   const changeTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  }
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   return (
     <Disclosure as="nav" className="dark:bg-gray-900 bg-white drop-shadow-lg">
@@ -126,7 +130,7 @@ export default function Header({userName}) {
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
                             )}
                           >
-                            Your Profile
+                            {t("your_profile")}
                           </a>
                         )}
                       </Menu.Item>
@@ -139,7 +143,7 @@ export default function Header({userName}) {
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
                             )}
                           >
-                            Settings
+                            {t("settings")}
                           </a>
                         )}
                       </Menu.Item>
@@ -156,7 +160,7 @@ export default function Header({userName}) {
                               localStorage.removeItem("emailForSignIn");
                             }}
                           >
-                            Sign out
+                            {t("sign_out")}
                           </a>
                         )}
                       </Menu.Item>
@@ -164,6 +168,22 @@ export default function Header({userName}) {
                   </Transition>
                 </Menu>
                 <span className="text-white font-medium mx-2">{userName}</span>
+                <strong className="mx-2"> | </strong>
+                <label className="swap">
+                  <input type="checkbox" />
+                  <div
+                    className="swap-on"
+                    onClick={() => i18next.changeLanguage("tr")}
+                  >
+                    TR
+                  </div>
+                  <div
+                    className="swap-off"
+                    onClick={() => i18next.changeLanguage("en")}
+                  >
+                    EN
+                  </div>
+                </label>
               </div>
             </div>
           </div>

@@ -6,12 +6,16 @@ import { loginValidations } from "../validations";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
+import { useTranslation } from "react-i18next";
+
 
 export default function Login() {
 
   const {user, setUser } = useAuth();
 
   const navigate = useNavigate();
+
+  const {t} = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -49,12 +53,12 @@ export default function Login() {
               Do You Think I
             </span>
             <h2 className="text-3xl font-bold dark:text-white text-gray-600 mt-1">
-              Sign in to your account
+              {t("login_to_account")}
             </h2>
           </div>
           <div className="mt-8">
             <label className="mb-3 block font-medium text-gray-400">
-              Sign in with
+              {t("login_with")}
             </label>
             <div className="flex justify-between">
               <button
@@ -121,7 +125,7 @@ export default function Login() {
           </div>
           <div>
             <span className="text-center relative block m-4 text-gray-400 before:absolute before:w-[26%] before:h-[1px] before:bg-gray-400 before:top-0 before:bottom-0 before:block before:my-auto after:absolute after:w-[26%] after:h-[1px] after:bg-gray-400 after:right-0 after:top-0 after:bottom-0 after:block after:my-auto">
-              or continue with
+              {t("or_continue_with")}
             </span>
           </div>
           <form onSubmit={formik.handleSubmit}>
@@ -140,7 +144,7 @@ export default function Login() {
             </div>
             <div>
               <label className="block mt-6 mb-1 text-md label font-semibold">
-                Password
+                {t("password")}
               </label>
               <input
                 className="input input-bordered w-full max-w-xs text-md text-gray-200"
@@ -154,10 +158,10 @@ export default function Login() {
 
             <div className="flex items-center justify-between mt-5">
               <div className="flex items-center">
-                <div class="form-control">
-                  <label class="label cursor-pointer">
-                    <input type="checkbox" class="checkbox checkbox-primary" />
-                    <span class="label-text ml-2 font-medium">Remember me</span>
+                <div className="form-control">
+                  <label className="label cursor-pointer">
+                    <input type="checkbox" className="checkbox checkbox-primary" />
+                    <span className="label-text ml-2 font-medium">{t("remember_me")}</span>
                   </label>
                 </div>
               </div>
@@ -167,11 +171,11 @@ export default function Login() {
                   href="/#"
                   className="text-[14px] text-indigo-600 hover:text-indigo-500 font-medium"
                 >
-                  Forgot your password?
+                  {t("forgot_password")}
                 </a>
               </div>
             </div>
-            <button type="submit" className="btn btn-primary w-full mt-5" onClick={(e) => e.target.classList.add("loading")}>Login</button>
+            <button type="submit" className="btn btn-primary w-full mt-5 capitalize" onClick={(e) => e.target.classList.add("loading")}>{t("login")}</button>
           </form>
         </div>
       </div>

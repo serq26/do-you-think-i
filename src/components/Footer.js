@@ -1,6 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-gray-900">
       <div className="relative max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8 lg:pt-24">
@@ -92,25 +96,25 @@ export default function Footer() {
             <ul className="flex flex-wrap justify-center gap-6 lg:justify-end md:gap-8 lg:gap-12">
               <li>
                 <a className="text-white transition hover:text-white/75" href="/">
-                  About
+                  {t("menu_home")}
                 </a>
               </li>
 
               <li>
-                <a className="text-white transition hover:text-white/75" href="/">
-                  Services
+                <a className="text-white transition hover:text-white/75" href="/categories">
+                  {t("menu_categories")}
                 </a>
               </li>
 
               <li>
-                <a className="text-white transition hover:text-white/75" href="/">
-                  Projects
+                <a className="text-white transition hover:text-white/75" href="/add-question">
+                  {t("menu_addQuestion")}
                 </a>
               </li>
 
               <li>
-                <a className="text-white transition hover:text-white/75" href="/">
-                  Blog
+                <a className="text-white transition hover:text-white/75" href="/login">
+                  {t("menu_login")}
                 </a>
               </li>
             </ul>
@@ -118,7 +122,7 @@ export default function Footer() {
         </div>
 
         <p className="mt-12 text-sm text-center text-gray-400 lg:text-right">
-          Copyright &copy; 2022. All rights reserved.
+          Copyright &copy; 2022. {t("copyright")}
         </p>
       </div>
     </footer>

@@ -13,6 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Country, State } from "country-state-city";
+import { useTranslation } from "react-i18next";
 // import bcrypt from "bcryptjs";
 
 export default function Signin() {
@@ -20,7 +21,7 @@ export default function Signin() {
   const [cities, setCities] = useState([]);
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-
+  const {t} = useTranslation()
   const swiperRef = useRef(null);
 
   const authentication = getAuth();
@@ -105,7 +106,7 @@ export default function Signin() {
             Do You Think I
           </span>
           <h2 className="text-3xl font-bold dark:text-white text-gray-600 mt-1">
-            Sign in to your account
+            {t("signin_to_account")}
           </h2>
         </div>
         {!isComplete ? (
@@ -138,7 +139,7 @@ export default function Signin() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.password}
-                      placeholder="Password"
+                      placeholder={t("password")}
                       className="input input-bordered w-full"
                     />
                   </div>
@@ -149,19 +150,19 @@ export default function Signin() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.password_confirm}
-                      placeholder="Password Confirm"
+                      placeholder={t("password_confirm")}
                       className="input input-bordered w-full"
                     />
                   </div>
                   <button
                     type="button"
-                    className="btn btn-primary w-1/2"
+                    className="btn btn-primary w-1/2 capitalize"
                     onClick={() => {
                       setProgress(progress + 50);
                       swiperRef.current.swiper.slideNext();
                     }}
                   >
-                    Next
+                    {t("next")}
                   </button>
                 </div>
               </SwiperSlide>
@@ -173,7 +174,7 @@ export default function Signin() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.name}
-                      placeholder="Name"
+                      placeholder={t("name")}
                       className="input input-bordered w-full max-w-xs"
                     />
                   </div>
@@ -183,7 +184,7 @@ export default function Signin() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.surname}
-                      placeholder="Surname"
+                      placeholder={t("surname")}
                       className="input input-bordered w-full max-w-xs"
                     />
                   </div>
@@ -195,16 +196,16 @@ export default function Signin() {
                       onChange={formik.handleChange}
                     >
                       <option disabled selected>
-                        Gender
+                      {t("gender")}
                       </option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
+                      <option value="Male">{t("male")}</option>
+                      <option value="Female">{t("female")}</option>
                     </select>
                   </div>
                   <div className="mb-5">
                     <div className="form-control w-full">
                       <label class="label">
-                        <span class="label-text">Birthdate</span>
+                        <span class="label-text">{t("birthdate")}</span>
                       </label>
                       <input
                         type="date"
@@ -218,13 +219,13 @@ export default function Signin() {
                   </div>
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-primary capitalize"
                     onClick={() => {
                       setProgress(progress + 50);
                       swiperRef.current.swiper.slideNext();
                     }}
                   >
-                    Next
+                    {t("next")}
                   </button>
                 </div>
               </SwiperSlide>
@@ -233,7 +234,7 @@ export default function Signin() {
                   <div className="mb-5 form-control w-full max-w-xs">
                     <label class="label">
                       <span class="label-text text-lg">
-                        Where do you live ?
+                      {t("where_live")}
                       </span>
                     </label>
                     <select
@@ -246,7 +247,7 @@ export default function Signin() {
                         setCities(State.getStatesOfCountry(e.target.value));
                       }}
                     >
-                      <option selected>Choose Country</option>
+                      <option selected>{t("choose_country")}</option>
                       {countries.map((country, index) => (
                         <option value={country.isoCode} key={index}>
                           {country.name}
@@ -256,14 +257,14 @@ export default function Signin() {
                   </div>
                   <div className="mb-5  form-control w-full max-w-xs">
                     <label class="label">
-                      <span class="label-text text-lg">City</span>
+                      <span class="label-text text-lg">{t("city")}</span>
                     </label>
                     <select
                       className="select select-bordered w-full max-w-xs"
                       name="city"
                       onChange={(e) => (formik.values.city = e.target.value)}
                     >
-                      <option selected>Choose City</option>
+                      <option selected>{t("choose_city")}</option>
                       {selectedCountry !== null ? (
                         cities.map((city, index) => (
                           <option value={city.name} key={index}>
@@ -276,11 +277,11 @@ export default function Signin() {
                     </select>
                   </div>
                   <button
-                    className="btn btn-primary mt-3"
+                    className="btn btn-primary mt-3 capitalize"
                     type="submit"
                     onClick={(e) => e.target.classList.add("loading")}
                   >
-                    Submit
+                    {t("submit")}
                   </button>
                 </div>
               </SwiperSlide>
@@ -302,7 +303,7 @@ export default function Signin() {
               />
             </svg>
             <span className="font-medium text-xl w-full text-center ">
-              Check your e-mail address for e-mail verification.
+              {t("check_email_verify")}
             </span>
           </div>
         )}

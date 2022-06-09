@@ -5,10 +5,12 @@ import "swiper/css/navigation";
 import QuestionCard from "./QuestionCard";
 import { firestore } from "../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import { useTranslation } from "react-i18next";
 
 export default function Question() {
   const swiperRef = useRef(null);
   const [questions, setQuestions] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const getQuestions = async () => {
@@ -50,7 +52,7 @@ export default function Question() {
             className="btn btn-active btn-ghost capitalize"
             onClick={() => swiperRef.current.swiper.slideNext()}
           >
-            Pass Question 
+            {t("pass_question")}
           </button>
         </div>
       </div>
