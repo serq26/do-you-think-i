@@ -5,6 +5,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import { getAuth } from "firebase/auth";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
+import { useLocation, Link } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -13,15 +14,15 @@ function classNames(...classes) {
 export default function Header({ userName, setLocale }) {
   const { theme, setTheme } = useTheme();
   const authentication = getAuth();
-
+  const location = useLocation();
   const { t } = useTranslation();
 
   const navigation = [
-    { name: t("menu_home"), href: "/", current: true },
-    { name: t("menu_categories"), href: "/categories", current: false },
-    { name: t("menu_addQuestion"), href: "/add-question", current: false },
-    { name: t("menu_login"), href: "/login", current: false },
-    { name: t("menu_signin"), href: "/signin", current: false },
+    { name: t("menu_home"), href: "/", current: location.pathname === '/' ? true : false },
+    { name: t("menu_categories"), href: "/categories", current: location.pathname === '/categorie' ? true : false },
+    { name: t("menu_addQuestion"), href: "/add-question", current: location.pathname === '/add-question' ? true : false },
+    { name: t("menu_login"), href: "/login", current: location.pathname === '/login' ? true : false },
+    { name: t("menu_signin"), href: "/signin", current: location.pathname === '/signin' ? true : false },
   ];
 
   const changeTheme = () => {
@@ -49,26 +50,25 @@ export default function Header({ userName, setLocale }) {
                 <div className="flex-shrink-0 flex items-center">
                   <a href="/" title="Do You Think I">
                     <span className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-200">
-                      Do You Think I
+                      Do You Think ?
                     </span>
                   </a>
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className={classNames(
                           item.current
                             ? "bg-gray-700 text-white"
                             : "dark:text-gray-300 text-gray-600 hover:bg-gray-600 hover:text-white",
                           "px-3 py-2 rounded-md text-sm font-medium"
                         )}
-                        aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -103,12 +103,17 @@ export default function Header({ userName, setLocale }) {
                 <Menu as="div" className="ml-3 relative z-50">
                   <div>
                     <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <span className="sr-only">Open user menu</span>
-                      <img
+                      {/* <span className="sr-only">Open user menu</span> */}
+                      {/* <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
+                        src=""
+                        alt={userName}
+                      /> */}
+                      <div className="avatar placeholder">
+                        <div className="bg-gray-800 text-neutral-content rounded-full w-10">
+                          <span className="text-xl">{userName && userName[0]}</span>
+                        </div>
+                      </div>
                     </Menu.Button>
                   </div>
                   <Transition
@@ -124,7 +129,7 @@ export default function Header({ userName, setLocale }) {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="/#"
+                            href="/profile"
                             className={classNames(
                               active ? "dark:bg-gray-600 bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
@@ -171,21 +176,26 @@ export default function Header({ userName, setLocale }) {
                 <strong className="mx-2"> | </strong>
                 <div className="dropdown">
                   <div tabIndex={0} className="btn btn-ghost gap-1 normal-case">
-                      <svg
-                        className="inline-block h-4 w-4 fill-current md:h-5 md:w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 512 512"
-                      >
-                        <path d="M363,176,246,464h47.24l24.49-58h90.54l24.49,58H480ZM336.31,362,363,279.85,389.69,362Z"></path>
-                        <path d="M272,320c-.25-.19-20.59-15.77-45.42-42.67,39.58-53.64,62-114.61,71.15-143.33H352V90H214V48H170V90H32v44H251.25c-9.52,26.95-27.05,69.5-53.79,108.36-32.68-43.44-47.14-75.88-47.33-76.22L143,152l-38,22,6.87,13.86c.89,1.56,17.19,37.9,54.71,86.57.92,1.21,1.85,2.39,2.78,3.57-49.72,56.86-89.15,79.09-89.66,79.47L64,368l23,36,19.3-11.47c2.2-1.67,41.33-24,92-80.78,24.52,26.28,43.22,40.83,44.3,41.67L255,362Z"></path>
-                      </svg>
+                    <svg
+                      className="inline-block h-4 w-4 fill-current md:h-5 md:w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M363,176,246,464h47.24l24.49-58h90.54l24.49,58H480ZM336.31,362,363,279.85,389.69,362Z"></path>
+                      <path d="M272,320c-.25-.19-20.59-15.77-45.42-42.67,39.58-53.64,62-114.61,71.15-143.33H352V90H214V48H170V90H32v44H251.25c-9.52,26.95-27.05,69.5-53.79,108.36-32.68-43.44-47.14-75.88-47.33-76.22L143,152l-38,22,6.87,13.86c.89,1.56,17.19,37.9,54.71,86.57.92,1.21,1.85,2.39,2.78,3.57-49.72,56.86-89.15,79.09-89.66,79.47L64,368l23,36,19.3-11.47c2.2-1.67,41.33-24,92-80.78,24.52,26.28,43.22,40.83,44.3,41.67L255,362Z"></path>
+                    </svg>
                   </div>
                   <div className="dropdown-content text-base-content rounded-t-box rounded-b-box top-px mt-12 w-56 overflow-y-auto shadow-2xl z-[50]">
                     <ul tabIndex={0} className="menu menu-compact gap-1 p-3">
                       <li>
-                        <button className={`flex ${i18next.language === 'en' && 'active'}`} onClick={() => i18next.changeLanguage("en")}>
+                        <button
+                          className={`flex ${
+                            i18next.language === "en" && "active"
+                          }`}
+                          onClick={() => i18next.changeLanguage("en")}
+                        >
                           <svg
                             className="w-6 h-6"
                             xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +224,12 @@ export default function Header({ userName, setLocale }) {
                         </button>
                       </li>
                       <li>
-                        <button className={`flex ${i18next.language === 'tr' && 'active'}`} onClick={() => i18next.changeLanguage("tr")}>
+                        <button
+                          className={`flex ${
+                            i18next.language === "tr" && "active"
+                          }`}
+                          onClick={() => i18next.changeLanguage("tr")}
+                        >
                           <svg
                             className="w-6 h-6"
                             xmlns="http://www.w3.org/2000/svg"
@@ -237,21 +252,6 @@ export default function Header({ userName, setLocale }) {
                     </ul>
                   </div>
                 </div>
-                {/* <label className="swap">
-                  <input type="checkbox" />
-                  <div
-                    className="swap-on"
-                    onClick={() => i18next.changeLanguage("tr")}
-                  >
-                    TR
-                  </div>
-                  <div
-                    className="swap-off"
-                    onClick={() => i18next.changeLanguage("en")}
-                  >
-                    EN
-                  </div>
-                </label> */}
               </div>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { firestore, storage } from "../firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function AddQuestion() {
   const [uploadImage, setUploadImage] = useState(null);
@@ -12,6 +13,7 @@ export default function AddQuestion() {
   const [progress, setProgress] = useState(0);
   const [isUploaded, setIsUploaded] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const { userId } = useAuth();
   const types = ["image/png", "image/jpeg"];
   const {t} = useTranslation();
 
@@ -24,6 +26,7 @@ export default function AddQuestion() {
       },
     ],
     img: "",
+    userId: userId
   };
 
   const handleChamgeImage = (e) => {

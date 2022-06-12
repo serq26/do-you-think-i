@@ -7,12 +7,14 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState({});
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
       const auth = getAuth();
       onAuthStateChanged(auth, async (user) => {
         if (user) {
           const uid = user.uid;
+          setUserId(uid);
           const docRef = doc(firestore, "users", uid);
           const docSnap = await getDoc(docRef);
           setUser(docSnap.data());
@@ -23,7 +25,7 @@ const AuthProvider = ({ children }) => {
       });
     }, []);
 
-    const values = { user }
+    const values = { user, userId }
 
   return (
     <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

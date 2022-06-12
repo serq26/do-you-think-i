@@ -6,7 +6,7 @@ export default function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="bg-gray-900">
+    <footer className="dark:bg-gray-900 bg-white drop-shadow-2xl">
       <div className="relative max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8 lg:pt-24">
         <div className="absolute top-4 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8">
           <a
@@ -95,25 +95,25 @@ export default function Footer() {
 
             <ul className="flex flex-wrap justify-center gap-6 lg:justify-end md:gap-8 lg:gap-12">
               <li>
-                <a className="text-white transition hover:text-white/75" href="/">
+                <a className="dark:text-gray-300 text-gray-600 transition hover:text-teal-500" href="/">
                   {t("menu_home")}
                 </a>
               </li>
 
               <li>
-                <a className="text-white transition hover:text-white/75" href="/categories">
+                <a className="dark:text-gray-300 text-gray-600 transition hover:text-teal-500" href="/categories">
                   {t("menu_categories")}
                 </a>
               </li>
 
               <li>
-                <a className="text-white transition hover:text-white/75" href="/add-question">
+                <a className="dark:text-gray-300 text-gray-600 transition hover:text-teal-500" href="/add-question">
                   {t("menu_addQuestion")}
                 </a>
               </li>
 
               <li>
-                <a className="text-white transition hover:text-white/75" href="/login">
+                <a className="dark:text-gray-300 text-gray-600 transition hover:text-teal-500" href="/login">
                   {t("menu_login")}
                 </a>
               </li>
