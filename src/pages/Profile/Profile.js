@@ -78,7 +78,7 @@ export default function Profile() {
           </li>
           <li>
             <Link
-              to=""
+              to="/"
               onClick={() => {
                 authentication.signOut();
                 localStorage.removeItem("emailForSignIn");
