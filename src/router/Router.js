@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
 import Signin from "../pages/Signin";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
@@ -9,8 +9,12 @@ import Questions from "../pages/Profile/Questions";
 import Settings from "../pages/Profile/Settings";
 import Account from "../pages/Profile/Account";
 import EditQuestion from "../pages/Profile/EditQuestion";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Router() {
+
+  const { loggedIn } = useAuth();
+
   const routes = useRoutes([
     {
       path: "/",
@@ -26,7 +30,7 @@ export default function Router() {
     },
     {
       path: "/verification",
-      element: <Verification />,
+      element: loggedIn ?  <Verification /> : <Navigate to="login" />,
     },
     {
       path: "/add-question",
@@ -34,7 +38,7 @@ export default function Router() {
     },
     {
       path: "/profile",
-      element: <Profile />,
+      element: loggedIn ? <Profile /> : <Navigate to="/signin" />,
       children: [
         {
           index: true,

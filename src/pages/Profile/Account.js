@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Formik, Field, Form, FieldArray } from "formik";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Country, State } from "country-state-city";
 
 export default function Account() {
-  const [isUploaded, setIsUploaded] = useState(false);
+  const [isProfileCompleted, setIsProfileCompleted] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [user, setUser] = useState({});
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -25,6 +25,7 @@ export default function Account() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { state } = useLocation();
   const { t } = useTranslation();
   const { userId } = useAuth();
   const countries = Country.getAllCountries();
@@ -39,8 +40,16 @@ export default function Account() {
           if (docSnap.exists()) {
             setUser(docSnap.data());
             setLoading(false);
+            setIsProfileCompleted(true);
           } else {
-            console.log("error");
+            setUser({
+              name: state.firstName,
+              surname: state.lastName,
+              email: state.email              
+            });
+            setIsProfileCompleted(false);
+            setLoading(false);
+            console.log("errors");
           }
         } catch (error) {
           setError(error);
@@ -64,13 +73,13 @@ export default function Account() {
         <div className="shadow rounded-md p-4 w-full mx-auto">
           <div className="animate-pulse flex space-x-4 flex-col">
             <div className="flex-1 space-y-6">
-            <div className="h-10 bg-slate-700 rounded"></div>
-            <div className="h-10 bg-slate-700 rounded"></div>
-            <div className="h-10 bg-slate-700 rounded"></div>
-            <div className="h-10 bg-slate-700 rounded"></div>
-            <div className="h-10 bg-slate-700 rounded"></div>
-            <div className="h-10 bg-slate-700 rounded"></div>
-            <div className="h-10 bg-slate-700 rounded"></div>
+              <div className="h-10 bg-slate-700 rounded"></div>
+              <div className="h-10 bg-slate-700 rounded"></div>
+              <div className="h-10 bg-slate-700 rounded"></div>
+              <div className="h-10 bg-slate-700 rounded"></div>
+              <div className="h-10 bg-slate-700 rounded"></div>
+              <div className="h-10 bg-slate-700 rounded"></div>
+              <div className="h-10 bg-slate-700 rounded"></div>
             </div>
           </div>
         </div>
@@ -82,6 +91,26 @@ export default function Account() {
 
   return (
     <div className="p-8">
+      {!isProfileCompleted && (
+        <div className="alert alert-warning shadow-lg mb-6">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            <span className="font-medium">You should fill in your profile information to continue.</span>
+          </div>
+        </div>
+      )}
       {!isComplete ? (
         <Formik
           initialValues={initialValues}

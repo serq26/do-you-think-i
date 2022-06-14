@@ -11,12 +11,15 @@ const firebaseConfig = {
   storageBucket: "do-you-think-i.appspot.com",
   messagingSenderId: "1053844820587",
   appId: "1:1053844820587:web:8790a4e3fb732dbf9a572e",
-  measurementId: "G-X94BWSCH8W"
+  measurementId: "G-X94BWSCH8W",
+  clientId:
+    "292858190702-nb0o9c3kfh0vosr1kmbf3jueo5emjc5t.apps.googleusercontent.com",
+  scopes: ["email", "profile"],
 };
 
 const actionCodeSettings = {
-  url: 'http://localhost:3000/verification',
-  handleCodeInApp: true
+  url: "http://localhost:3000/verification",
+  handleCodeInApp: true,
 };
 
 const app = initializeApp(firebaseConfig);

@@ -6,6 +6,7 @@ import { getAuth } from "firebase/auth";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 import { useLocation, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -13,16 +14,16 @@ function classNames(...classes) {
 
 export default function Header({ userName, setLocale }) {
   const { theme, setTheme } = useTheme();
-  const authentication = getAuth();
+  const { loggedIn, logout } = useAuth();
   const location = useLocation();
   const { t } = useTranslation();
 
   const navigation = [
     { name: t("menu_home"), href: "/", current: location.pathname === '/' ? true : false },
     { name: t("menu_categories"), href: "/categories", current: location.pathname === '/categorie' ? true : false },
-    { name: t("menu_addQuestion"), href: "/add-question", current: location.pathname === '/add-question' ? true : false },
-    { name: t("menu_login"), href: "/login", current: location.pathname === '/login' ? true : false },
-    { name: t("menu_signin"), href: "/signin", current: location.pathname === '/signin' ? true : false },
+    { name: t("menu_addQuestion"), href: "/add-question", current: location.pathname === '/add-question' ? true : false, display: !loggedIn && "none" },
+    { name: t("menu_login"), href: "/login", current: location.pathname === '/login' ? true : false, display: loggedIn && "none"},
+    { name: t("menu_signin"), href: "/signin", current: location.pathname === '/signin' ? true : false, display: loggedIn && "none"},
   ];
 
   const changeTheme = () => {
@@ -60,6 +61,7 @@ export default function Header({ userName, setLocale }) {
                       <Link
                         key={item.name}
                         to={item.href}
+                        style={{display:item.display}}
                         className={classNames(
                           item.current
                             ? "bg-gray-700 text-white"
@@ -92,23 +94,18 @@ export default function Header({ userName, setLocale }) {
                     <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
                   </svg>
                 </label>
-                <button
+                {loggedIn && (<button
                   type="button"
                   className="dark:bg-gray-800 bg-white p-1 rounded-full dark:text-gray-400 text-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-7 w-7" aria-hidden="true" />
-                </button>
+                </button>)}
                 {/* Profile dropdown */}
+                {loggedIn && (
                 <Menu as="div" className="ml-3 relative z-50">
                   <div>
                     <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      {/* <span className="sr-only">Open user menu</span> */}
-                      {/* <img
-                        className="h-8 w-8 rounded-full"
-                        src=""
-                        alt={userName}
-                      /> */}
                       <div className="avatar placeholder">
                         <div className="bg-gray-800 text-neutral-content rounded-full w-10">
                           <span className="text-xl">{userName && userName[0]}</span>
@@ -128,52 +125,50 @@ export default function Header({ userName, setLocale }) {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-900 ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="/profile"
+                          <Link
+                            to="/profile"
                             className={classNames(
                               active ? "dark:bg-gray-600 bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
                             )}
                           >
                             {t("your_profile")}
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="/#"
+                          <Link
+                            to="/#"
                             className={classNames(
                               active ? "dark:bg-gray-600 bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
                             )}
                           >
                             {t("settings")}
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="/#"
+                          <Link
+                            to="/"
                             className={classNames(
                               active ? "dark:bg-gray-600 bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
                             )}
-                            onClick={() => {
-                              authentication.signOut();
-                              localStorage.removeItem("emailForSignIn");
-                            }}
+                            onClick={logout}
                           >
                             {t("sign_out")}
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
                 </Menu>
+                )}
                 <span className="text-white font-medium mx-2">{userName}</span>
-                <strong className="mx-2"> | </strong>
+                {loggedIn && (<strong className="mx-2"> | </strong>)}
                 <div className="dropdown">
                   <div tabIndex={0} className="btn btn-ghost gap-1 normal-case">
                     <svg

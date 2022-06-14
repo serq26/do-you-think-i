@@ -1,9 +1,9 @@
-import { getAuth } from "firebase/auth";
 import React from "react";
 import { Outlet, Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function Profile() {
-  const authentication = getAuth();
+  const { logout } = useAuth();
 
   return (
     <div className="container py-20">
@@ -79,10 +79,7 @@ export default function Profile() {
           <li>
             <Link
               to="/"
-              onClick={() => {
-                authentication.signOut();
-                localStorage.removeItem("emailForSignIn");
-              }}
+              onClick={logout}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
