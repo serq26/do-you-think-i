@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import { loginValidations } from "../validations";
 // import { collection, getDocs, query, where } from "firebase/firestore";
@@ -9,38 +9,46 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  GithubAuthProvider 
+  GithubAuthProvider,
+  TwitterAuthProvider,
 } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import Alert from "../components/Alert";
 
 export default function Login() {
   const { user, setUser } = useAuth();
-
+  const [alert, setAlert] = useState({ title: "", message: "" });
+  const [alertStatus, setAlertStatus] = useState(false);
   const navigate = useNavigate();
-
   const { t } = useTranslation();
 
   let provider;
   let providerInstance;
   let providerError;
   const loginWith = (method) => {
-
     switch (method) {
       case "google":
         provider = new GoogleAuthProvider();
-        // provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-        providerInstance = (result) => GoogleAuthProvider.credentialFromResult(result);
-        providerError = (error) => GoogleAuthProvider.credentialFromError(error);
+        providerInstance = (result) =>
+          GoogleAuthProvider.credentialFromResult(result);
+        providerError = (error) =>
+          GoogleAuthProvider.credentialFromError(error);
         break;
       case "github":
         provider = new GithubAuthProvider();
-        provider.addScope('user');
-        providerInstance = (result) => GithubAuthProvider.credentialFromResult(result);
-        providerError = (error) => GithubAuthProvider.credentialFromError(error);
+        provider.addScope("user");
+        providerInstance = (result) =>
+          GithubAuthProvider.credentialFromResult(result);
+        providerError = (error) =>
+          GithubAuthProvider.credentialFromError(error);
         break;
       case "twitter":
-      
+        provider = new TwitterAuthProvider();
+        providerInstance = (result) =>
+          TwitterAuthProvider.credentialFromResult(result);
+        providerError = (error) =>
+          TwitterAuthProvider.credentialFromError(error);
         break;
       default:
         provider = "";
@@ -51,22 +59,31 @@ export default function Login() {
     signInWithPopup(auth, provider)
       .then((result) => {
         const credential = providerInstance(result);
-        console.log(result)
         const token = credential.accessToken;
         const user = result.user;
         window.localStorage.setItem("emailForSignIn", user.email);
-        if(user)
-          navigate("/profile", { state: result._tokenResponse})
-        
+        if (user) navigate("/profile", { state: result._tokenResponse });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        const email = error.customData.email;
         const credential = providerError(error);
-        console.log(errorCode,errorMessage,credential,email);
+        console.log(errorCode, errorMessage, credential);
+        if (error.code === "auth/account-exists-with-different-credential") {
+          setAlertStatus(true);
+          setAlert({
+            title: "Login Failed",
+            message:
+              "You have already registered before with another signin methods. Please try logging in with the login method you registered with.",
+          });
+        }
       });
   };
+
+  const closeAlertWindow =() => {
+    setAlertStatus(false);
+    setAlert({ title: "", message: "" });
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -96,7 +113,8 @@ export default function Login() {
   });
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center relative">
+      {alertStatus && <Alert type="warning" close={closeAlertWindow} />}
       <div className="w-1/2 flex items-center justify-center flex-col">
         <div>
           <div>
@@ -135,6 +153,7 @@ export default function Login() {
               </button>
               <button
                 type="button"
+                onClick={() => loginWith("twitter")}
                 className="text-gray-200 hover:bg-white hover:text-gray-900 transition-all duration-1000 w-full border-2 focus:ring-4 focus:outline-none focus:ring-[#1da1f2]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center dark:focus:ring-[#1da1f2]/55 mr-2 mb-2"
               >
                 <svg
