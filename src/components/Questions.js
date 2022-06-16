@@ -1,61 +1,51 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import QuestionCard from "./QuestionCard";
-import { firestore } from "../firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "react-query";
+import { getQuestions } from "../firebase/firebase";
 
 export default function Question() {
+  const [displayPassBtn, setDisplayPassBtn] = useState(true);
   const swiperRef = useRef(null);
-  const [questions, setQuestions] = useState([]);
   const { t } = useTranslation();
+  const { data, error, status } = useQuery("questions", getQuestions);
 
-  useEffect(() => {
-    const getQuestions = async () => {
-      const getQuestionsFromFirebase = [];
-      try {
-        const querySnapshot = await getDocs(collection(firestore, "questions"));
-        querySnapshot.forEach((doc) => {
-          getQuestionsFromFirebase.push({ ...doc.data(), key: doc.id });
-        });
-        setQuestions(getQuestionsFromFirebase);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  if (status === "loading") return "Loading...";
 
-    getQuestions();
-  }, []);
+  if (status === "error") return "An error has occurred: " + error.message;
 
   return (
-    <>
-      <div className="container">
-        <Swiper
-          ref={swiperRef}
-          className="mySwiper"
-          spaceBetween={50}
-          slidesPerView={1}
-          speed={1200}
-          allowTouchMove={false}
+    <div className="container">
+      <Swiper
+        ref={swiperRef}
+        className="mySwiper"
+        spaceBetween={50}
+        slidesPerView={1}
+        speed={1200}
+        allowTouchMove={false}
+        onReachEnd={() => setDisplayPassBtn(false)}
+      >
+        {data.length > 0 &&
+          data.map((question) => (
+            <SwiperSlide key={question.key}>
+              <QuestionCard
+                question={question}
+                swiperRef={swiperRef}
+              ></QuestionCard>
+            </SwiperSlide>
+          ))}
+      </Swiper>
+      <div className="my-2 mr-3 mb-4 flex items-center justify-center">
+        {displayPassBtn && <button
+          className="btn btn-active btn-ghost capitalize"
+          onClick={() => swiperRef.current.swiper.slideNext()}
         >
-          {questions.length > 0 &&
-            questions.map((question, key) => (
-              <SwiperSlide key={key}>
-                <QuestionCard question={question} swiperRef={swiperRef}></QuestionCard>
-              </SwiperSlide>
-            ))}
-        </Swiper>
-        <div className="my-2 mr-3 mb-4 flex items-center justify-center">
-          <button
-            className="btn btn-active btn-ghost capitalize"
-            onClick={() => swiperRef.current.swiper.slideNext()}
-          >
-            {t("pass_question")}
-          </button>
-        </div>
+          {t("pass_question")}
+        </button>}
       </div>
-    </>
+    </div>
   );
 }

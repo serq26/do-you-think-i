@@ -25,7 +25,7 @@ export default function QuestionCard({ question, swiperRef }) {
       {myAnswer !== null && (
         <div>
           <div
-            class={`alert alert-error shadow-lg absolute left-0 right-0 top-0 bottom-0 z-20 opacity-80 p-12 flex flex-col items-center justify-center drop-shadow-xl ${
+            className={`alert alert-error shadow-lg absolute left-0 right-0 top-0 bottom-0 z-20 opacity-80 p-12 flex flex-col items-center justify-center drop-shadow-xl ${
               myAnswer === true ? "hidden" : ""
             }`}
           >
@@ -69,9 +69,9 @@ export default function QuestionCard({ question, swiperRef }) {
       <Zoom
         overlayBgColorEnd="rgba(0,0,0,0.7)"
         transitionDuration="700"
-        zoomMargin={50}
+        zoomMargin={250}
       >
-        <img src={question.img} alt="Question" />
+          <img src={question.img} alt="Question" style={{maxWidth:"100%",margin:"0 auto"}} />
       </Zoom>
       <div>
         <p className="text-xl mt-5 text-center mr-auto ml-auto max-w-[75%]">
