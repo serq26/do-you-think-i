@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { useAuth } from "../../contexts/AuthContext";
 import { Country, State } from "country-state-city";
+import AccountSkeleton from "../../components/skeletons/AccountSkeleton";
 
 export default function Account() {
   const [isProfileCompleted, setIsProfileCompleted] = useState(false);
@@ -67,24 +68,7 @@ export default function Account() {
 
   const initialValues = user;
 
-  if (loading)
-    return (
-      <div className="w-full h-auto">
-        <div className="shadow rounded-md p-4 w-full mx-auto">
-          <div className="animate-pulse flex space-x-4 flex-col">
-            <div className="flex-1 space-y-6">
-              <div className="h-10 bg-slate-700 rounded"></div>
-              <div className="h-10 bg-slate-700 rounded"></div>
-              <div className="h-10 bg-slate-700 rounded"></div>
-              <div className="h-10 bg-slate-700 rounded"></div>
-              <div className="h-10 bg-slate-700 rounded"></div>
-              <div className="h-10 bg-slate-700 rounded"></div>
-              <div className="h-10 bg-slate-700 rounded"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  if (loading) return <AccountSkeleton />
 
   if (error)
     return <div>{`There is a problem fetching the post data - ${error}`}</div>;
