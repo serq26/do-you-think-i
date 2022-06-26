@@ -1,24 +1,57 @@
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
+import { useAuth } from "../contexts/AuthContext";
+import { firestore } from "../firebaseConfig";
+import { addToSeenList } from "../firebase/firebase";
 
 export default function QuestionCard({ question, swiperRef }) {
   const [myAnswer, setMyAnswer] = useState(null);
   const [radioColor, setRadioColor] = useState("radio");
+  const { userId } = useAuth();
 
   useEffect(() => {
     question.answers.forEach((item) => {
       if (item.isCorrect === myAnswer) {
         if (myAnswer === true) {
           setRadioColor("radio-accent");
-          setTimeout(() => {swiperRef.current.swiper.slideNext()},2000);
+          setTimeout(() => {
+            swiperRef.current.swiper.slideNext();
+          }, 2000);
         } else {
           setRadioColor("radio-secondary");
-          setTimeout(() => {swiperRef.current.swiper.slideNext()},2000);
+          setTimeout(() => {
+            swiperRef.current.swiper.slideNext();
+          }, 2000);
         }
       }
     });
   }, [myAnswer]);
+
+  const handleAnswer = async (answer) => {
+    const values = {
+      userId: userId,
+      questionId: question.key,
+      answer: answer.answer,
+    };
+    await addDoc(collection(firestore, "answers"), values);
+
+    await addToSeenList({
+      questionId: question.key,
+      answer: answer.answer,
+      userId,
+    });
+
+    setMyAnswer(answer.isCorrect);
+  };
 
   return (
     <div className="bg-transparent rounded-2xl p-3 border-2 border-gray-600 drop-shadow-xl">
@@ -71,7 +104,11 @@ export default function QuestionCard({ question, swiperRef }) {
         transitionDuration="700"
         zoomMargin={250}
       >
-          <img src={question.img} alt="Question" style={{maxWidth:"100%",margin:"0 auto"}} />
+        <img
+          src={question.img}
+          alt="Question"
+          style={{ maxWidth: "100%", margin: "0 auto" }}
+        />
       </Zoom>
       <div>
         <p className="text-xl mt-5 text-center mr-auto ml-auto max-w-[75%]">
@@ -87,7 +124,7 @@ export default function QuestionCard({ question, swiperRef }) {
                 name="answer"
                 className={`radio ${radioColor}`}
                 value={answer.answer}
-                onClick={() => setMyAnswer(answer.isCorrect)}
+                onClick={() => handleAnswer(answer)}
               />
               <span className="label-text ml-2">{answer.answer}</span>
             </label>
