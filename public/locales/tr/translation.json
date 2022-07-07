@@ -16,7 +16,7 @@
     "check_true_answer": "Eğer bu cevap doğru ise işaretleyin",
     "copyright": "Tüm hakları saklıdır.",
     "login_to_account": "Hesabınıza giriş yapın",
-    "login_with": "Giriş",
+    "login_with": "E-postanız ile Giriş Yapın veya Kayıt Olun",
     "or_continue_with":"veya",
     "password": "Şifre",
     "password_confirm": "Şifre Tekrar",
@@ -39,5 +39,6 @@
     "check_email_verify": "Doğrulama için e-postanızı kontrol ediniz.",
     "your_profile": "Profil",
     "settings": "Ayarlar",
-    "sign_out": "Çıkış Yap"
+    "sign_out": "Çıkış Yap",
+    "welcome": "Do You Think'e Hoşgeldiniz"
 }

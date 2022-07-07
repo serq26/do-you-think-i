@@ -14,7 +14,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Country, State } from "country-state-city";
 import { useTranslation } from "react-i18next";
-// import bcrypt from "bcryptjs";
 
 export default function Signin() {
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -27,14 +26,7 @@ export default function Signin() {
   const authentication = getAuth();
 
   const countries = Country.getAllCountries();
-
   
-  // const hashPassword = async (password) => {
-  //   const salt = await bcrypt.genSaltSync(10);
-  //   const hashedPassword = await bcrypt.hash(password,salt);
-  //   return hashedPassword;
-  // }
-
   const registerFirebase = (values) => {
     createUserWithEmailAndPassword(
       authentication,
@@ -42,17 +34,10 @@ export default function Signin() {
       values.password
     )
       .then(async (userCredential) => {
-        // values = {...values, password: await hashPassword(values.password), passwor_confirm: null };
         delete values.password;
         delete values.password_confirm;
         const userRef = doc(firestore, "users", userCredential.user.uid);
         await setDoc(userRef, values);
-
-        // sendEmailVerification(authentication.currentUser).then(() => {
-        //   // Email verification sent!
-        //   setIsComplete(true);
-        // });
-        // authentication.signOut();
 
         sendSignInLinkToEmail(authentication, values.email, actionCodeSettings)
           .then(() => {            

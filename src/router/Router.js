@@ -10,6 +10,7 @@ import Settings from "../pages/Profile/Settings";
 import Account from "../pages/Profile/Account";
 import EditQuestion from "../pages/Profile/EditQuestion";
 import { useAuth } from "../contexts/AuthContext";
+import Statistics from "../pages/Profile/Statistics";
 
 export default function Router() {
 
@@ -30,7 +31,7 @@ export default function Router() {
     },
     {
       path: "/verification",
-      element: loggedIn ?  <Verification /> : <Navigate to="login" />,
+      element: <Verification />,
     },
     {
       path: "/add-question",
@@ -38,7 +39,8 @@ export default function Router() {
     },
     {
       path: "/profile",
-      element: loggedIn ? <Profile /> : <Navigate to="/signin" />,
+      // element: loggedIn ? <Profile /> : <Navigate to="/signin" />,
+      element: <Profile />,
       children: [
         {
           index: true,
@@ -52,6 +54,10 @@ export default function Router() {
         {
           path: "questions/:id",
           element: <EditQuestion />,
+        },
+        {
+          path: "questions/statistics/:id",
+          element: <Statistics />,
         },
         {
           path: "settings",

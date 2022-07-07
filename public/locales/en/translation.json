@@ -16,7 +16,7 @@
     "check_true_answer": "If this answer correct, so clicked it.",
     "copyright": "All rights reserved.",
     "login_to_account":"Login to your account",
-    "login_with":"Login with",
+    "login_with":"Login or Register with your email",
     "or_continue_with":"or continue with",
     "password": "Password",
     "password_confirm": "Password Confirm",
@@ -39,5 +39,6 @@
     "check_email_verify": "Check your e-mail address for e-mail verification.",
     "your_profile": "Your Profile",
     "settings": "Settings",
-    "sign_out": "Sign Out"
+    "sign_out": "Sign Out",
+    "welcome": "Welcome to Do You Think"
 }

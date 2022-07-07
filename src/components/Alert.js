@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-function Alert({ type, close }) {
+function Alert({ type, close, alert }) {
   let alertIcon;
   switch (type) {
     case "warning":

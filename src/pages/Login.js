@@ -1,19 +1,11 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import { loginValidations } from "../validations";
-// import { collection, getDocs, query, where } from "firebase/firestore";
-// import { firestore } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  TwitterAuthProvider,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import { signinWith } from "../firebase/firebase";
 import Alert from "../components/Alert";
 
 export default function Login() {
@@ -23,67 +15,24 @@ export default function Login() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  let provider;
-  let providerInstance;
-  let providerError;
-  const loginWith = (method) => {
-    switch (method) {
-      case "google":
-        provider = new GoogleAuthProvider();
-        providerInstance = (result) =>
-          GoogleAuthProvider.credentialFromResult(result);
-        providerError = (error) =>
-          GoogleAuthProvider.credentialFromError(error);
-        break;
-      case "github":
-        provider = new GithubAuthProvider();
-        provider.addScope("user");
-        providerInstance = (result) =>
-          GithubAuthProvider.credentialFromResult(result);
-        providerError = (error) =>
-          GithubAuthProvider.credentialFromError(error);
-        break;
-      case "twitter":
-        provider = new TwitterAuthProvider();
-        providerInstance = (result) =>
-          TwitterAuthProvider.credentialFromResult(result);
-        providerError = (error) =>
-          TwitterAuthProvider.credentialFromError(error);
-        break;
-      default:
-        provider = "";
-        break;
-    }
+  const handleSignin = async (signInMethod) => {
+    const { user, result, error } = await signinWith(signInMethod);
+    if (user) navigate("/profile", { state: result._tokenResponse });
 
-    const auth = getAuth();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = providerInstance(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        window.localStorage.setItem("emailForSignIn", user.email);
-        if (user) navigate("/profile", { state: result._tokenResponse });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const credential = providerError(error);
-        console.log(errorCode, errorMessage, credential);
-        if (error.code === "auth/account-exists-with-different-credential") {
-          setAlertStatus(true);
-          setAlert({
-            title: "Login Failed",
-            message:
-              "You have already registered before with another signin methods. Please try logging in with the login method you registered with.",
-          });
-        }
+    if (error !== undefined && error.errorCode === "auth/account-exists-with-different-credential") {
+      setAlertStatus(true);
+      setAlert({
+        title: "Login Failed",
+        message:
+          "You have already registered before with another signin methods. Please try logging in with the login method you registered with.",
       });
+    }
   };
 
-  const closeAlertWindow =() => {
+  const closeAlertWindow = () => {
     setAlertStatus(false);
     setAlert({ title: "", message: "" });
-  }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -113,16 +62,18 @@ export default function Login() {
   });
 
   return (
-    <div className="w-full flex justify-center relative">
-      {alertStatus && <Alert type="warning" close={closeAlertWindow} />}
+    <div className="flex justify-center h-screen">
+      {alertStatus && (
+        <Alert type="warning" close={closeAlertWindow} alert={alert} />
+      )}
       <div className="w-1/2 flex items-center justify-center flex-col">
         <div>
           <div>
             <span className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-200">
               Do You Think I
             </span>
-            <h2 className="text-3xl font-bold dark:text-white text-gray-600 mt-1">
-              {t("login_to_account")}
+            <h2 className="text-2xl font-bold dark:text-white text-gray-600 mt-1">
+              {t("welcome")}
             </h2>
           </div>
           <div className="mt-8">
@@ -132,7 +83,7 @@ export default function Login() {
             <div className="flex justify-between">
               <button
                 type="button"
-                onClick={() => loginWith("google")}
+                onClick={async () => await handleSignin("google")}
                 className="w-full border-2 text-gray-200 hover:bg-white hover:text-gray-900 transition-all duration-1000 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 mr-2 mb-2"
               >
                 <svg
@@ -153,7 +104,7 @@ export default function Login() {
               </button>
               <button
                 type="button"
-                onClick={() => loginWith("twitter")}
+                onClick={async () => await handleSignin("twitter")}
                 className="text-gray-200 hover:bg-white hover:text-gray-900 transition-all duration-1000 w-full border-2 focus:ring-4 focus:outline-none focus:ring-[#1da1f2]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center dark:focus:ring-[#1da1f2]/55 mr-2 mb-2"
               >
                 <svg
@@ -174,7 +125,7 @@ export default function Login() {
               </button>
               <button
                 type="button"
-                onClick={() => loginWith("github")}
+                onClick={async () => await handleSignin("github")}
                 className="text-gray-200 hover:bg-white hover:text-gray-900 transition-all duration-1000 w-full border-2 focus:ring-4 focus:outline-none focus:ring-[#1da1f2]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center dark:focus:ring-[#1da1f2]/55 mr-2 mb-2"
               >
                 <svg

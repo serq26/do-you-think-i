@@ -13,16 +13,17 @@ export default function Questions() {
     getMyQuestions
   );
 
-  if (status === "loading") return(
-    <div className="mt-10 mb-10 grid grid-cols-3 gap-6 px-5">
-      <QuestionSkeleton />
-      <QuestionSkeleton />
-      <QuestionSkeleton />
-      <QuestionSkeleton />
-      <QuestionSkeleton />
-      <QuestionSkeleton />
-    </div>
-  )
+  if (status === "loading")
+    return (
+      <div className="mt-10 mb-10 grid grid-cols-3 gap-6 px-5">
+        <QuestionSkeleton />
+        <QuestionSkeleton />
+        <QuestionSkeleton />
+        <QuestionSkeleton />
+        <QuestionSkeleton />
+        <QuestionSkeleton />
+      </div>
+    );
 
   if (status === "error") return "An error has occurred: " + error.message;
 
@@ -31,7 +32,8 @@ export default function Questions() {
       <h1 className="py-4 text-center font-medium text-2xl underline">
         My Questions
       </h1>
-      <div className="mt-10 grid grid-cols-3 gap-6">        
+      
+      <div className="mt-10 grid grid-cols-3 gap-6">
         {data.pages.length > 0 &&
           data.pages.map((group, i) => (
             <Fragment key={i}>
@@ -55,6 +57,29 @@ export default function Questions() {
                       ))}
                     </ul>
                     <div className="card-actions justify-end mt-5">
+                      <Link to={`statistics/${question.key}`}>
+                        <div
+                          className="tooltip tooltip-info"
+                          data-tip="Statistics"
+                        >
+                          <button className="btn btn-outline btn-info gap-2">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </Link>
                       <Link to={question.key}>
                         <div
                           className="tooltip tooltip-warning"

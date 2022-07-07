@@ -46,7 +46,7 @@ export default function Account() {
             setUser({
               name: state.firstName,
               surname: state.lastName,
-              email: state.email              
+              email: state.email,
             });
             setIsProfileCompleted(false);
             setLoading(false);
@@ -68,7 +68,7 @@ export default function Account() {
 
   const initialValues = user;
 
-  if (loading) return <AccountSkeleton />
+  if (loading) return <AccountSkeleton />;
 
   if (error)
     return <div>{`There is a problem fetching the post data - ${error}`}</div>;
@@ -91,7 +91,9 @@ export default function Account() {
                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
               />
             </svg>
-            <span className="font-medium">You should fill in your profile information to continue.</span>
+            <span className="font-medium">
+              You should fill in your profile information to continue.
+            </span>
           </div>
         </div>
       )}
@@ -150,10 +152,21 @@ export default function Account() {
                   setSelectedCountry(e.target.value);
                   values.country =
                     e.target.options[e.target.selectedIndex].text;
+                  setCities(
+                    State.getStatesOfCountry(
+                      e.target.options[e.target.selectedIndex].getAttribute(
+                        "code"
+                      )
+                    )
+                  );
                 }}
               >
                 {countries.map((country, index) => (
-                  <option value={country.name} key={index}>
+                  <option
+                    value={country.name}
+                    key={index}
+                    code={country.isoCode}
+                  >
                     {country.name}
                   </option>
                 ))}
@@ -163,7 +176,10 @@ export default function Account() {
                 as="select"
                 name="city"
                 value={values.city}
-                onChange={(e) => (values.city = e.target.value)}
+                onChange={(e) => {
+                  values.city = e.target.value;
+                  console.log(e.target.value)
+                }}
               >
                 {cities.map((city, index) => (
                   <option value={city.name} key={index}>

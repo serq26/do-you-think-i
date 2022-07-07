@@ -11,7 +11,7 @@ import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import { useAuth } from "../contexts/AuthContext";
 import { firestore } from "../firebaseConfig";
-import { addToSeenList } from "../firebase/firebase";
+import { addToQuestionStats, addToSeenList } from "../firebase/firebase";
 
 export default function QuestionCard({ question, swiperRef }) {
   const [myAnswer, setMyAnswer] = useState(null);
@@ -37,14 +37,14 @@ export default function QuestionCard({ question, swiperRef }) {
   }, [myAnswer]);
 
   const handleAnswer = async (answer) => {
-    const values = {
-      userId: userId,
+    
+    await addToSeenList({
       questionId: question.key,
       answer: answer.answer,
-    };
-    await addDoc(collection(firestore, "answers"), values);
+      userId,
+    });
 
-    await addToSeenList({
+    await addToQuestionStats({
       questionId: question.key,
       answer: answer.answer,
       userId,
