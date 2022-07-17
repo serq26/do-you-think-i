@@ -16,6 +16,7 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
   TwitterAuthProvider,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 export const signinWith = async (method) => {
@@ -122,6 +123,95 @@ export const addToSeenList = async (value) => {
         [value.questionId]: value.answer,
       });
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addToQuestionStats = async (value) => {
+  try {
+    const docRef = doc(firestore, "questionStats", value.questionId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      await updateDoc(doc(firestore, "questionStats", value.questionId), {
+        [value.userId]: value.answer,
+      });
+    } else {
+      await setDoc(doc(firestore, "questionStats", value.questionId), {
+        [value.userId]: value.answer,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAnsweredCount = async (questionId) => {
+  try {
+    const docRef = doc(firestore, "questionStats", questionId);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAnsweredUserInfo = async (userId) => {
+  try {
+    const docRef = doc(firestore, "users", userId);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getStatistics = async (questionId) => {
+  try {
+    const docRef = doc(firestore, "questionStats", questionId);
+    const docSnap = await getDoc(docRef);
+    const answeredCount =
+      docSnap.data() !== undefined ? Object.keys(docSnap.data()).length : 0;
+
+    let groupedAnswers = [];
+    Object.entries(docSnap.data()).map(
+      ([key, value]) =>
+        !groupedAnswers.includes(value) && groupedAnswers.push(value)
+    );
+
+    const answers = 
+      groupedAnswers.map((ans,i) => {
+        return {
+          [ans]: {
+            country: [
+              { name: "Turkey", count: 78*(i+1) },
+              { name: "England", count: 12*(i+1) },
+            ],
+            gender: [
+              { name: "Male", count: 32 },
+              { name: "Female", count: 29 },
+            ],
+            city: [
+              { name: "Ankara", count: 22 },
+              { name: "Istanbul", count: 54 },
+              { name: "London", count: 21 },
+              { name: "Liverpool", count: 13 },
+            ],
+            age: [
+              { name: "24", count: 93 },
+              { name: "32", count: 82 },
+            ],
+          },
+        };
+      });
+
+    const stats = {
+      questionId: questionId,
+      answeredCount: answeredCount,
+      answers: answers,
+    };
+    console.log("stats", stats);
+    return stats;
   } catch (error) {
     console.log(error);
   }
