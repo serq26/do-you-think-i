@@ -17,6 +17,7 @@
     "daisyui": "^2.15.2",
     "firebase": "^9.8.2",
     "formik": "^2.2.9",
+    "framer-motion": "^6.4.2",
     "i18next": "^21.8.9",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.1",

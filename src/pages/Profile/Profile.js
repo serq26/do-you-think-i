@@ -1,9 +1,10 @@
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function Profile() {
   const { logout } = useAuth();
+  const location = useLocation();
 
   return (
     <div className="container py-20">
@@ -15,7 +16,7 @@ export default function Profile() {
         </div>
         <ul className="col-span-2 menu dark:bg-gray-800 bg-white p-2 rounded-box h-max sticky top-5 boxShadow">
           <li>
-            <Link to="/profile">
+            <Link to="/profile" className={location.pathname === "/profile" && "active"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -34,7 +35,7 @@ export default function Profile() {
             </Link>
           </li>
           <li>
-            <Link to="/profile/questions">
+            <Link to="/profile/questions" className={location.pathname.startsWith("/profile/questions")  && "active"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -53,7 +54,7 @@ export default function Profile() {
             </Link>
           </li>
           <li>
-            <Link to="/profile/settings">
+            <Link to="/profile/settings" className={location.pathname === "/profile/settings" && "active"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
