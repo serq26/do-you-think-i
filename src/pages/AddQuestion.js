@@ -6,6 +6,8 @@ import { collection, addDoc } from "firebase/firestore";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../contexts/AuthContext";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import CheckBox from "../components/CheckBox";
 
 export default function AddQuestion() {
   const [uploadImage, setUploadImage] = useState(null);
@@ -15,7 +17,9 @@ export default function AddQuestion() {
   const [isComplete, setIsComplete] = useState(false);
   const { userId } = useAuth();
   const types = ["image/png", "image/jpeg"];
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+  const [animationParent] = useAutoAnimate();
+  const [checkBoxes, setCheckBoxes] = useState(["checkBox-0"]);
 
   const initialValues = {
     question: "",
@@ -26,7 +30,7 @@ export default function AddQuestion() {
       },
     ],
     img: "",
-    userId: userId
+    userId: userId,
   };
 
   const handleChamgeImage = (e) => {
@@ -105,7 +109,10 @@ export default function AddQuestion() {
             onSubmit={async (values) => {
               const imgUrl = await uploadImageToStorage(uploadImage);
               values["img"] = imgUrl;
-              const docRef = await addDoc(collection(firestore, "questions"), values);
+              const docRef = await addDoc(
+                collection(firestore, "questions"),
+                values
+              );
               setIsComplete(true);
             }}
           >
@@ -133,7 +140,9 @@ export default function AddQuestion() {
                           ></path>
                         </svg>
                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">{t("file_upload1")}</span>{" "}
+                          <span className="font-semibold">
+                            {t("file_upload1")}
+                          </span>{" "}
                           {t("or")} {t("file_upload2")}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -166,7 +175,7 @@ export default function AddQuestion() {
                 />
                 <FieldArray name="answers">
                   {({ remove, push }) => (
-                    <div>
+                    <div ref={animationParent}>
                       {values.answers.length > 0 &&
                         values.answers.map((answer, index) => (
                           <div className="row" key={index}>
@@ -174,7 +183,7 @@ export default function AddQuestion() {
                               <Field
                                 type="text"
                                 name={`answers.${index}.answer`}
-                                placeholder={`${index+1}. ${t("answer")}`}
+                                placeholder={`${index + 1}. ${t("answer")}`}
                                 className="input input-bordered w-2/3 mr-4"
                               />
                               <div
@@ -192,6 +201,16 @@ export default function AddQuestion() {
                                     values.answers[index].isCorrect = true;
                                   }}
                                 />
+                                {/* <div
+                                  className="checkBox-wrapper"
+                                  style={{ height: "50px", width: "50px" }}
+                                >
+                                  <CheckBox
+                                    id={`checkBox-${index}`}
+                                    checkBoxes={checkBoxes}
+                                    setCheckBoxes={setCheckBoxes}
+                                  />
+                                </div> */}
                               </div>
                               <button
                                 type="button"
@@ -209,12 +228,17 @@ export default function AddQuestion() {
                         ))}
                       <button
                         type="button"
-                        className="btn btn-outline btn-accent capitalize"                        
-                        onClick={() =>
+                        className="btn btn-outline btn-accent capitalize"
+                        onClick={() => {
                           values.answers.length !== 5
                             ? push({ answer: "", isCorrect: "" })
-                            : alert("Maximum answer section..!")
-                        }
+                            : alert("Maximum answer section..!");
+
+                          const lastCheckbox = checkBoxes.slice(-1);
+                          const lastIndex = lastCheckbox.toString().split("-")[1];
+                          const newCheckbox = "checkBox-"+ (parseInt(lastIndex)+1);
+                          setCheckBoxes([...checkBoxes,newCheckbox]);
+                        }}
                       >
                         {t("add_more_answer")}
                       </button>

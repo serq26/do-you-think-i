@@ -13,6 +13,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import EditQuestionSkeleton from "../../components/skeletons/EditQuestionSkeleton";
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 export default function EditQuestion() {
   const [uploadImage, setUploadImage] = useState(null);
@@ -27,6 +28,7 @@ export default function EditQuestion() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { id } = useParams();
+  const [animationParent] = useAutoAnimate();
 
   useEffect(() => {
     const getQuestion = async () => {
@@ -164,7 +166,7 @@ export default function EditQuestion() {
               />
               <FieldArray name="answers">
                 {({ remove, push }) => (
-                  <div>
+                  <div ref={animationParent}>
                     {values.answers.length > 0 &&
                       values.answers.map((answer, index) => (
                         <div className="row" key={index}>
