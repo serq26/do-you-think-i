@@ -11,6 +11,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function Question() {
   const [displayPassBtn, setDisplayPassBtn] = useState(true);
+  const [lastSlide, setLastSlide] = useState(false);
   const swiperRef = useRef(null);
   const { t } = useTranslation();
   const { userId } = useAuth();
@@ -29,7 +30,7 @@ export default function Question() {
         slidesPerView={1}
         speed={1200}
         allowTouchMove={false}
-        onReachEnd={() => setDisplayPassBtn(false)}
+        onReachEnd={() => {setDisplayPassBtn(false);setLastSlide(true)}}
       >
         {data.length > 0 &&
           data.map((question,index) => (
@@ -37,6 +38,7 @@ export default function Question() {
               <QuestionCard
                 question={question}
                 swiperRef={swiperRef}
+                lastSlide={lastSlide}
               ></QuestionCard>
             </SwiperSlide>
           ))}
