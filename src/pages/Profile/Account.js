@@ -15,6 +15,9 @@ import {
 import { useAuth } from "../../contexts/AuthContext";
 import { Country, State } from "country-state-city";
 import AccountSkeleton from "../../components/skeletons/AccountSkeleton";
+import { accountValidations } from "../../validations";
+import {  toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export default function Account() {
   const [isProfileCompleted, setIsProfileCompleted] = useState(false);
@@ -97,42 +100,66 @@ export default function Account() {
           </div>
         </div>
       )}
-      {!isComplete ? (
         <Formik
           initialValues={initialValues}
+          validationSchema={accountValidations}
           onSubmit={async (values) => {
             const batch = writeBatch(firestore);
             const sfRef = doc(firestore, "users", userId);
             batch.update(sfRef, values);
             await batch.commit();
-            setIsComplete(true);
+            toast.success("Updated your profile informations...", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setIsComplete(false);
           }}
         >
-          {({ values }) => (
+          {({ values, errors, touched }) => (
             <Form>
               <Field
                 type="text"
                 name="name"
                 placeholder="Name"
-                className="input input-bordered w-full mb-5"
+                className="input input-bordered w-full mt-5"
               />
+              <div>
+                {errors.name && touched.name && (
+                  <div style={{ color: "red" }}>{errors.name}</div>
+                )}
+              </div>
               <Field
                 type="text"
                 name="surname"
                 placeholder="Surname"
-                className="input input-bordered w-full mb-5"
+                className="input input-bordered w-full mt-5"
               />
+              <div>
+                {errors.surname && touched.surname && (
+                  <div style={{ color: "red" }}>{errors.surname}</div>
+                )}
+              </div>
               <Field
                 type="text"
                 name="email"
                 placeholder="E-mail"
-                className="input input-bordered w-full mb-5"
+                className="input input-bordered w-full mt-5"
               />
+              <div>
+                {errors.email && touched.email && (
+                  <div style={{ color: "red" }}>{errors.email}</div>
+                )}
+              </div>
               <Field
                 name="gender"
                 as="select"
                 value={values.gender}
-                className="input input-bordered w-full mb-5"
+                className="input input-bordered w-full mt-5"
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -141,10 +168,10 @@ export default function Account() {
                 type="date"
                 name="birthdate"
                 placeholder="Birthdate"
-                className="input input-bordered w-full mb-5"
+                className="input input-bordered w-full mt-5"
               />
               <Field
-                className="input input-bordered w-full mb-5"
+                className="input input-bordered w-full mt-5"
                 as="select"
                 name="country"
                 value={values.country}
@@ -172,13 +199,13 @@ export default function Account() {
                 ))}
               </Field>
               <Field
-                className="input input-bordered w-full mb-5"
+                className="input input-bordered w-full mt-5"
                 as="select"
                 name="city"
                 value={values.city}
                 onChange={(e) => {
                   values.city = e.target.value;
-                  console.log(e.target.value)
+                  console.log(e.target.value);
                 }}
               >
                 {cities.map((city, index) => (
@@ -189,34 +216,14 @@ export default function Account() {
               </Field>
               <button
                 type="submit"
-                className="btn btn-accent w-full mt-5"
-                onClick={(e) => e.target.classList.add("loading")}
+                className={`btn btn-accent w-full mt-5 ${isComplete ? "loading" : ""}`}
+                onClick={() => setIsComplete(true)}
               >
-                {t("send")}
+                {t("save")}
               </button>
             </Form>
           )}
         </Formik>
-      ) : (
-        <div className="alert alert-success shadow-lg mt-5 p-12 flex flex-col items-center justify-center drop-shadow-xl">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current flex-shrink-0 h-12 w-12 text-white"
-            fillRule="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span className="font-medium text-xl w-full text-center block">
-            Updated your question
-          </span>
-        </div>
-      )}
     </div>
   );
 }

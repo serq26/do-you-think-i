@@ -7,19 +7,26 @@ import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { signinWith } from "../firebase/firebase";
 import Alert from "../components/Alert";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function Login() {
   const { user, setUser } = useAuth();
   const [alert, setAlert] = useState({ title: "", message: "" });
   const [alertStatus, setAlertStatus] = useState(false);
+  const [loading, setLoading] = useState("");
+  const [firebaseError, setFirebaseError] = useState("");
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [animationParent] = useAutoAnimate();
 
   const handleSignin = async (signInMethod) => {
     const { user, result, error } = await signinWith(signInMethod);
     if (user) navigate("/profile", { state: result._tokenResponse });
 
-    if (error !== undefined && error.errorCode === "auth/account-exists-with-different-credential") {
+    if (
+      error !== undefined &&
+      error.errorCode === "auth/account-exists-with-different-credential"
+    ) {
       setAlertStatus(true);
       setAlert({
         title: "Login Failed",
@@ -39,7 +46,7 @@ export default function Login() {
       email: "",
       password: "",
     },
-    loginValidations,
+    validationSchema: loginValidations,
     onSubmit: async (values, bag) => {
       try {
         const auth = getAuth();
@@ -48,12 +55,12 @@ export default function Login() {
             // Signed in
             // const user = userCredential.user;
             // setUser(userCredential.user);
+            setLoading("loading");
             window.localStorage.setItem("emailForSignIn", user.email);
             navigate("/");
           })
           .catch((error) => {
-            const errorMessage = error.message;
-            console.log(errorMessage);
+            setFirebaseError(error.message);
           });
       } catch (e) {
         console.log(e);
@@ -151,6 +158,31 @@ export default function Login() {
               {t("or_continue_with")}
             </span>
           </div>
+          <div ref={animationParent}>
+            {firebaseError && (
+              <div className="bg-gray-700 py-8 px-4 rounded-lg">
+                <p className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    style={{ color: "red", marginRight: 4 }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  {firebaseError === "Firebase: Error (auth/wrong-password)." &&
+                    "E-mail or password is incorrect."}
+                </p>
+              </div>
+            )}
+          </div>
           <form onSubmit={formik.handleSubmit}>
             <div>
               <label className="block mt-6 mb-1 text-md label font-semibold">
@@ -164,6 +196,11 @@ export default function Login() {
                 value={formik.values.email}
                 className="input input-bordered w-full max-w-xs text-md text-gray-200"
               />
+              <div>
+                {formik.errors.email && formik.touched.email && (
+                  <div style={{ color: "red" }}>{formik.errors.email}</div>
+                )}
+              </div>
             </div>
             <div>
               <label className="block mt-6 mb-1 text-md label font-semibold">
@@ -177,8 +214,12 @@ export default function Login() {
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
               />
+              <div>
+                {formik.errors.password && formik.touched.password && (
+                  <div style={{ color: "red" }}>{formik.errors.password}</div>
+                )}
+              </div>
             </div>
-
             <div className="flex items-center justify-between mt-5">
               <div className="flex items-center">
                 <div className="form-control">
@@ -206,7 +247,19 @@ export default function Login() {
             <button
               type="submit"
               className="btn btn-primary w-full mt-5 capitalize"
-              onClick={(e) => e.target.classList.add("loading")}
+              onClick={(e) => {
+                if (
+                  formik.values.email !== "" &&
+                  formik.values.password !== "" &&
+                  loading !== "" &&
+                  firebaseError === ""
+                ) {
+                  e.target.classList.add(loading);
+                }
+              }}
+              disabled={
+                formik.errors.password || formik.errors.email ? true : false
+              }
             >
               {t("login")}
             </button>

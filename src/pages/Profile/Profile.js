@@ -10,11 +10,11 @@ export default function Profile() {
     <div className="container py-20">
       <div className="grid grid-cols-12 gap-8">
         <div className="col-start-1 col-end-10">
-          <div className="dark:bg-gray-800 bg-white p-2 rounded-box h-auto boxShadow relative">
+          <div className="dark:bg-gray-800 bg-gray-100 p-2 rounded-box h-auto relative">
             <Outlet />
           </div>
         </div>
-        <ul className="col-span-2 menu dark:bg-gray-800 bg-white p-2 rounded-box h-max sticky top-5 boxShadow">
+        <ul className="col-span-2 menu dark:bg-gray-800 bg-gray-100 p-2 rounded-box h-max sticky top-5">
           <li>
             <Link to="/profile" className={location.pathname === "/profile" && "active"}>
               <svg

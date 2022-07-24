@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useFormik } from "formik";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { firestore, storage } from "../firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
@@ -7,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../contexts/AuthContext";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import CheckBox from "../components/CheckBox";
+// import CheckBox from "../components/CheckBox";
 
 export default function AddQuestion() {
   const [uploadImage, setUploadImage] = useState(null);
@@ -19,7 +18,9 @@ export default function AddQuestion() {
   const types = ["image/png", "image/jpeg"];
   const { t } = useTranslation();
   const [animationParent] = useAutoAnimate();
+  const [animationParent2] = useAutoAnimate();
   const [checkBoxes, setCheckBoxes] = useState(["checkBox-0"]);
+  const [formError, setFormError] = useState(null);
 
   const initialValues = {
     question: "",
@@ -29,7 +30,7 @@ export default function AddQuestion() {
         isCorrect: false,
       },
     ],
-    img: "",
+    file: null,
     userId: userId,
   };
 
@@ -71,53 +72,54 @@ export default function AddQuestion() {
     });
   };
 
-  const formik = useFormik({
-    initialValues: {
-      question: "",
-      //   answer_1: "",
-      //   answer_2: "",
-      //   answer_3: "",
-      answers: [
-        { answer: "", isCorrectAnswer: "" },
-        //   {answer:"", isCorrectAnswer:""},
-        //   {answer:"", isCorrectAnswer:""}
-      ],
-      img: "",
-    },
-    // validationSchema,
-    onSubmit: async (values, bag) => {
-      try {
-        console.log(values);
-        // const imgUrl = await uploadImageToStorage(uploadImage);
-        // values["img"] = imgUrl;
-        // const docRef = await addDoc(collection(firestore, "questions"), values);
-        // setIsComplete(true);
-      } catch (e) {
-        bag.setErrors({ general: e.response.data.message });
-        console.log(e);
-      }
-    },
-  });
-
   return (
     <div className="container mx-auto p-4">
       <div className="w-full md:w-1/2 lg:w-1/3 mx-auto my-12">
         <h1 className="text-lg font-bold">{t("add_question")}</h1>
         {!isComplete ? (
           <Formik
-            initialValues={initialValues}
-            onSubmit={async (values) => {
-              const imgUrl = await uploadImageToStorage(uploadImage);
-              values["img"] = imgUrl;
-              const docRef = await addDoc(
-                collection(firestore, "questions"),
-                values
-              );
-              setIsComplete(true);
+            initialValues={initialValues}            
+            onSubmit={async (values, bag) => {
+              try {
+                const imgUrl = await uploadImageToStorage(uploadImage);
+                values["img"] = imgUrl;
+                const docRef = await addDoc(
+                  collection(firestore, "questions"),
+                  values
+                );
+                setIsComplete(true);
+              } catch (e) {
+                bag.setErrors({ general: e.response.data.message });
+                console.log(e);
+              }
             }}
           >
-            {({ values }) => (
+            {({ values, errors, touched }) => (
               <Form>
+                <div ref={animationParent2}>
+                  {formError && (
+                    <div className="bg-gray-700 py-8 px-4 rounded-lg mb-5">
+                      <p className="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          style={{ color: "red", marginRight: 4 }}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        {formError}
+                      </p>
+                    </div>
+                  )}
+                </div>
                 <div className="flex items-center justify-center w-full mb-5 relative">
                   <label
                     htmlFor="dropzone-file"
@@ -155,8 +157,10 @@ export default function AddQuestion() {
                     <input
                       id="dropzone-file"
                       type="file"
-                      className="hidden"
+                      name="file"
+                      className="opacity-0"
                       onChange={handleChamgeImage}
+                      required
                     />
                   </label>
                   {progress > 0 && (
@@ -171,7 +175,8 @@ export default function AddQuestion() {
                   type="text"
                   name="question"
                   placeholder={t("write_your_question")}
-                  className="input input-bordered w-full mb-5"
+                  className="input input-bordered w-full mt-5"
+                  required
                 />
                 <FieldArray name="answers">
                   {({ remove, push }) => (
@@ -179,12 +184,13 @@ export default function AddQuestion() {
                       {values.answers.length > 0 &&
                         values.answers.map((answer, index) => (
                           <div className="row" key={index}>
-                            <div className="flex justify-between items-center mb-5">
+                            <div className="flex justify-between items-center mt-5">
                               <Field
                                 type="text"
                                 name={`answers.${index}.answer`}
                                 placeholder={`${index + 1}. ${t("answer")}`}
                                 className="input input-bordered w-2/3 mr-4"
+                                required
                               />
                               <div
                                 className="tooltip tooltip-right"
@@ -197,7 +203,10 @@ export default function AddQuestion() {
                                   checked={values.answers[index].isCorrect}
                                   onClick={(e) => {
                                     e.target.checked = true;
-                                    values.answers.map((answer,index) => answer.isCorrect = false);
+                                    values.answers.map(
+                                      (answer, index) =>
+                                        (answer.isCorrect = false)
+                                    );
                                     values.answers[index].isCorrect = true;
                                   }}
                                 />
@@ -218,7 +227,7 @@ export default function AddQuestion() {
                                 onClick={() =>
                                   values.answers.length !== 2
                                     ? remove(index)
-                                    : alert("Minimum answer section..!")
+                                    : setFormError("The question must have at least 2 answers")
                                 }
                               >
                                 X
@@ -228,16 +237,19 @@ export default function AddQuestion() {
                         ))}
                       <button
                         type="button"
-                        className="btn btn-outline btn-accent capitalize"
+                        className="btn btn-outline btn-accent capitalize mt-5"
                         onClick={() => {
                           values.answers.length !== 5
                             ? push({ answer: "", isCorrect: "" })
-                            : alert("Maximum answer section..!");
+                            : setFormError("The question must have at most 5 answers");
 
                           const lastCheckbox = checkBoxes.slice(-1);
-                          const lastIndex = lastCheckbox.toString().split("-")[1];
-                          const newCheckbox = "checkBox-"+ (parseInt(lastIndex)+1);
-                          setCheckBoxes([...checkBoxes,newCheckbox]);
+                          const lastIndex = lastCheckbox
+                            .toString()
+                            .split("-")[1];
+                          const newCheckbox =
+                            "checkBox-" + (parseInt(lastIndex) + 1);
+                          setCheckBoxes([...checkBoxes, newCheckbox]);
                         }}
                       >
                         {t("add_more_answer")}

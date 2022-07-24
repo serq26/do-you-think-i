@@ -148,6 +148,7 @@ export default function EditQuestion() {
                     type="file"
                     className="hidden"
                     onChange={handleChamgeImage}
+                    required
                   />
                 </label>
                 {progress > 0 && (
@@ -163,6 +164,7 @@ export default function EditQuestion() {
                 name="question"
                 placeholder={t("write_your_question")}
                 className="input input-bordered w-full mb-5"
+                required
               />
               <FieldArray name="answers">
                 {({ remove, push }) => (
@@ -176,6 +178,7 @@ export default function EditQuestion() {
                               name={`answers.${index}.answer`}
                               placeholder={`${index + 1}. ${t("answer")}`}
                               className="input input-bordered w-2/3 mr-4"
+                              required
                             />
                             <div
                               className="tooltip tooltip-right"
