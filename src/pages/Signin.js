@@ -78,7 +78,7 @@ export default function Signin() {
   return (
     <div className="flex justify-center h-screen">
       <div
-        className="w-1/2 flex items-center justify-center flex-col relative"
+        className="w-1/2 xs:w-full flex items-center justify-center flex-col relative"
         style={{ backgroundColor: "rgb(248,250,252/.6)" }}
       >
         <progress
@@ -106,7 +106,7 @@ export default function Signin() {
             >
               <SwiperSlide>
                 <div className="flex justify-between flex-col items-center w-full">
-                  <div className="mb-5 w-1/3">
+                  <div className="mb-5 w-1/3 xs:w-5/6">
                     <input
                       type="email"
                       name="email"
@@ -124,7 +124,7 @@ export default function Signin() {
                       )}
                     </div>
                   </div>
-                  <div className="mb-5 w-1/3">
+                  <div className="mb-5 w-1/3 xs:w-5/6">
                     <input
                       type="password"
                       name="password"
@@ -142,7 +142,7 @@ export default function Signin() {
                       )}
                     </div>
                   </div>
-                  <div className="mb-5 w-1/3">
+                  <div className="mb-5 w-1/3 xs:w-5/6">
                     <input
                       type="password"
                       name="password_confirm"
@@ -163,7 +163,7 @@ export default function Signin() {
                   </div>
                   <button
                     type="submit"
-                    className="btn btn-primary w-1/3 capitalize"
+                    className="btn btn-primary w-1/3 xs:w-5/6 capitalize"
                     onClick={() => {
                       setProgress(progress + 50);
                       swiperRef.current.swiper.slideNext();
@@ -185,7 +185,7 @@ export default function Signin() {
               </SwiperSlide>
               <SwiperSlide>
                 <div className="flex justify-between flex-col items-center w-full">
-                  <div className="mb-5 w-1/3">
+                  <div className="mb-5 xs:mt-5 w-1/3 xs:w-5/6">
                     <input
                       name="name"
                       onChange={formik.handleChange}
@@ -202,7 +202,7 @@ export default function Signin() {
                       )}
                     </div>
                   </div>
-                  <div className="mb-5 w-1/3">
+                  <div className="mb-5 w-1/3 xs:w-5/6">
                     <input
                       name="surname"
                       onChange={formik.handleChange}
@@ -219,7 +219,7 @@ export default function Signin() {
                       )}
                     </div>
                   </div>
-                  <div className="mb-5 w-1/3">
+                  <div className="mb-5 w-1/3 xs:w-5/6">
                     <select
                       className="select select-bordered w-full max-w-xs"
                       name="gender"
@@ -238,7 +238,7 @@ export default function Signin() {
                       )}
                     </div>
                   </div>
-                  <div className="mb-5 w-1/3">
+                  <div className="mb-5 w-1/3 xs:w-5/6">
                     <div className="form-control w-full">
                       <label className="label">
                         <span className="label-text">{t("birthdate")}</span>
@@ -263,7 +263,7 @@ export default function Signin() {
                   </div>
                   <button
                     type="submit"
-                    className="btn btn-primary capitalize w-1/3"
+                    className="btn btn-primary capitalize w-1/3 xs:w-5/6"
                     onClick={() => {
                       setProgress(progress + 50);
                       swiperRef.current.swiper.slideNext();
@@ -386,7 +386,7 @@ export default function Signin() {
           </div>
         )}
       </div>
-      <div className="w-1/2">
+      <div className="w-1/2 block xs:hidden">
         <img
           src="https://source.unsplash.com/random/?wallpapers"
           alt="Wallpapers"

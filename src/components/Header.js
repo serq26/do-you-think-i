@@ -70,10 +70,10 @@ export default function Header({ userName, setLocale }) {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex-shrink-0 flex items-center">
+              <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start xs:pl-10 xs:justify-start">
+                <div className="flex-shrink-0 flex items-center ">
                   <a href="/" title="Do You Think I">
-                    <span className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-200">
+                    <span className="font-extrabold text-transparent text-2xl xs:text-[20px] bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-200">
                       Do You Think ?
                     </span>
                   </a>
@@ -98,80 +98,7 @@ export default function Header({ userName, setLocale }) {
                   </div>
                 </div>
               </div>
-              <div className="dropdown">
-                <div tabIndex={0} className="btn btn-ghost gap-1 normal-case">
-                  <svg
-                    className="inline-block h-4 w-4 fill-current md:h-5 md:w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 512 512"
-                  >
-                    <path d="M363,176,246,464h47.24l24.49-58h90.54l24.49,58H480ZM336.31,362,363,279.85,389.69,362Z"></path>
-                    <path d="M272,320c-.25-.19-20.59-15.77-45.42-42.67,39.58-53.64,62-114.61,71.15-143.33H352V90H214V48H170V90H32v44H251.25c-9.52,26.95-27.05,69.5-53.79,108.36-32.68-43.44-47.14-75.88-47.33-76.22L143,152l-38,22,6.87,13.86c.89,1.56,17.19,37.9,54.71,86.57.92,1.21,1.85,2.39,2.78,3.57-49.72,56.86-89.15,79.09-89.66,79.47L64,368l23,36,19.3-11.47c2.2-1.67,41.33-24,92-80.78,24.52,26.28,43.22,40.83,44.3,41.67L255,362Z"></path>
-                  </svg>
-                </div>
-                <div className="dropdown-content dark:bg-gray-800 bg-white text-base-content rounded-t-box rounded-b-box top-px mt-12 w-56 overflow-y-auto shadow-2xl z-[50]">
-                  <ul tabIndex={0} className="menu menu-compact gap-1 p-3">
-                    <li>
-                      <button
-                        className={`flex ${
-                          i18next.language === "en" && "active"
-                        }`}
-                        onClick={() => i18next.changeLanguage("en")}
-                      >
-                        <svg
-                          className="w-6 h-6"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 36 36"
-                        >
-                          <path
-                            fill="#00247D"
-                            d="M0 9.059V13h5.628zM4.664 31H13v-5.837zM23 25.164V31h8.335zM0 23v3.941L5.63 23zM31.337 5H23v5.837zM36 26.942V23h-5.631zM36 13V9.059L30.371 13zM13 5H4.664L13 10.837z"
-                          />
-                          <path
-                            fill="#CF1B2B"
-                            d="M25.14 23l9.712 6.801c.471-.479.808-1.082.99-1.749L28.627 23H25.14zM13 23h-2.141l-9.711 6.8c.521.53 1.189.909 1.938 1.085L13 23.943V23zm10-10h2.141l9.711-6.8c-.521-.53-1.188-.909-1.937-1.085L23 12.057V13zm-12.141 0L1.148 6.2C.677 6.68.34 7.282.157 7.949L7.372 13h3.487z"
-                          />
-                          <path
-                            fill="#EEE"
-                            d="M36 21H21v10h2v-5.836L31.335 31H32c1.117 0 2.126-.461 2.852-1.199L25.14 23h3.487l7.215 5.052c.093-.337.158-.686.158-1.052v-.058L30.369 23H36v-2zM0 21v2h5.63L0 26.941V27c0 1.091.439 2.078 1.148 2.8l9.711-6.8H13v.943l-9.914 6.941c.294.07.598.116.914.116h.664L13 25.163V31h2V21H0zM36 9c0-1.091-.439-2.078-1.148-2.8L25.141 13H23v-.943l9.915-6.942C32.62 5.046 32.316 5 32 5h-.663L23 10.837V5h-2v10h15v-2h-5.629L36 9.059V9zM13 5v5.837L4.664 5H4c-1.118 0-2.126.461-2.852 1.2l9.711 6.8H7.372L.157 7.949C.065 8.286 0 8.634 0 9v.059L5.628 13H0v2h15V5h-2z"
-                          />
-                          <path
-                            fill="#CF1B2B"
-                            d="M21 15V5h-6v10H0v6h15v10h6V21h15v-6z"
-                          />
-                        </svg>
-                        <span className="flex flex-1 justify-between">EN</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className={`flex ${
-                          i18next.language === "tr" && "active"
-                        }`}
-                        onClick={() => i18next.changeLanguage("tr")}
-                      >
-                        <svg
-                          className="w-6 h-6"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 36 36"
-                        >
-                          <path
-                            fill="#E30917"
-                            d="M36 27c0 2.209-1.791 4-4 4H4c-2.209 0-4-1.791-4-4V9c0-2.209 1.791-4 4-4h28c2.209 0 4 1.791 4 4v18z"
-                          />
-                          <path
-                            fill="#EEE"
-                            d="M16 24c-3.314 0-6-2.685-6-6 0-3.314 2.686-6 6-6 1.31 0 2.52.425 3.507 1.138-1.348-1.524-3.312-2.491-5.507-2.491-4.061 0-7.353 3.292-7.353 7.353 0 4.062 3.292 7.354 7.353 7.354 2.195 0 4.16-.967 5.507-2.492C18.521 23.575 17.312 24 16 24zm3.913-5.77l2.44.562.22 2.493 1.288-2.146 2.44.561-1.644-1.888 1.287-2.147-2.303.98-1.644-1.889.22 2.494z"
-                          />
-                        </svg>
-                        <span className="flex flex-1 justify-between">TR</span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <label className="swap swap-rotate mr-2">
                   <input type="checkbox" onChange={changeTheme} />
@@ -191,15 +118,84 @@ export default function Header({ userName, setLocale }) {
                     <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
                   </svg>
                 </label>
-                {loggedIn && (
-                  <button
-                    type="button"
-                    className="dark:bg-gray-800 bg-white p-1 rounded-full dark:text-gray-400 text-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-7 w-7" aria-hidden="true" />
-                  </button>
-                )}
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} className="btn btn-ghost gap-1 normal-case">
+                    <svg
+                      className="inline-block h-4 w-4 fill-current md:h-5 md:w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M363,176,246,464h47.24l24.49-58h90.54l24.49,58H480ZM336.31,362,363,279.85,389.69,362Z"></path>
+                      <path d="M272,320c-.25-.19-20.59-15.77-45.42-42.67,39.58-53.64,62-114.61,71.15-143.33H352V90H214V48H170V90H32v44H251.25c-9.52,26.95-27.05,69.5-53.79,108.36-32.68-43.44-47.14-75.88-47.33-76.22L143,152l-38,22,6.87,13.86c.89,1.56,17.19,37.9,54.71,86.57.92,1.21,1.85,2.39,2.78,3.57-49.72,56.86-89.15,79.09-89.66,79.47L64,368l23,36,19.3-11.47c2.2-1.67,41.33-24,92-80.78,24.52,26.28,43.22,40.83,44.3,41.67L255,362Z"></path>
+                    </svg>
+                  </div>
+                  <div className="dropdown-content dark:bg-gray-800 bg-white text-base-content rounded-t-box rounded-b-box top-px mt-12 w-56 overflow-y-auto shadow-2xl z-[50]">
+                    <ul tabIndex={0} className="menu menu-compact gap-1 p-3">
+                      <li>
+                        <button
+                          className={`flex ${
+                            i18next.language === "en" && "active"
+                          }`}
+                          onClick={() => i18next.changeLanguage("en")}
+                        >
+                          <svg
+                            className="w-6 h-6"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 36 36"
+                          >
+                            <path
+                              fill="#00247D"
+                              d="M0 9.059V13h5.628zM4.664 31H13v-5.837zM23 25.164V31h8.335zM0 23v3.941L5.63 23zM31.337 5H23v5.837zM36 26.942V23h-5.631zM36 13V9.059L30.371 13zM13 5H4.664L13 10.837z"
+                            />
+                            <path
+                              fill="#CF1B2B"
+                              d="M25.14 23l9.712 6.801c.471-.479.808-1.082.99-1.749L28.627 23H25.14zM13 23h-2.141l-9.711 6.8c.521.53 1.189.909 1.938 1.085L13 23.943V23zm10-10h2.141l9.711-6.8c-.521-.53-1.188-.909-1.937-1.085L23 12.057V13zm-12.141 0L1.148 6.2C.677 6.68.34 7.282.157 7.949L7.372 13h3.487z"
+                            />
+                            <path
+                              fill="#EEE"
+                              d="M36 21H21v10h2v-5.836L31.335 31H32c1.117 0 2.126-.461 2.852-1.199L25.14 23h3.487l7.215 5.052c.093-.337.158-.686.158-1.052v-.058L30.369 23H36v-2zM0 21v2h5.63L0 26.941V27c0 1.091.439 2.078 1.148 2.8l9.711-6.8H13v.943l-9.914 6.941c.294.07.598.116.914.116h.664L13 25.163V31h2V21H0zM36 9c0-1.091-.439-2.078-1.148-2.8L25.141 13H23v-.943l9.915-6.942C32.62 5.046 32.316 5 32 5h-.663L23 10.837V5h-2v10h15v-2h-5.629L36 9.059V9zM13 5v5.837L4.664 5H4c-1.118 0-2.126.461-2.852 1.2l9.711 6.8H7.372L.157 7.949C.065 8.286 0 8.634 0 9v.059L5.628 13H0v2h15V5h-2z"
+                            />
+                            <path
+                              fill="#CF1B2B"
+                              d="M21 15V5h-6v10H0v6h15v10h6V21h15v-6z"
+                            />
+                          </svg>
+                          <span className="flex flex-1 justify-between">
+                            EN
+                          </span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className={`flex ${
+                            i18next.language === "tr" && "active"
+                          }`}
+                          onClick={() => i18next.changeLanguage("tr")}
+                        >
+                          <svg
+                            className="w-6 h-6"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 36 36"
+                          >
+                            <path
+                              fill="#E30917"
+                              d="M36 27c0 2.209-1.791 4-4 4H4c-2.209 0-4-1.791-4-4V9c0-2.209 1.791-4 4-4h28c2.209 0 4 1.791 4 4v18z"
+                            />
+                            <path
+                              fill="#EEE"
+                              d="M16 24c-3.314 0-6-2.685-6-6 0-3.314 2.686-6 6-6 1.31 0 2.52.425 3.507 1.138-1.348-1.524-3.312-2.491-5.507-2.491-4.061 0-7.353 3.292-7.353 7.353 0 4.062 3.292 7.354 7.353 7.354 2.195 0 4.16-.967 5.507-2.492C18.521 23.575 17.312 24 16 24zm3.913-5.77l2.44.562.22 2.493 1.288-2.146 2.44.561-1.644-1.888 1.287-2.147-2.303.98-1.644-1.889.22 2.494z"
+                            />
+                          </svg>
+                          <span className="flex flex-1 justify-between">
+                            TR
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
                 {/* Profile dropdown */}
                 {loggedIn && (
                   <Menu as="div" className="ml-3 relative z-50">
@@ -268,8 +264,7 @@ export default function Header({ userName, setLocale }) {
                     </Transition>
                   </Menu>
                 )}
-                <span className="text-white font-medium mx-2">{userName}</span>
-                {loggedIn && <strong className="mx-2"> | </strong>}
+                <span className="text-white font-medium mx-2 xs:hidden">{userName}</span>
               </div>
             </div>
           </div>

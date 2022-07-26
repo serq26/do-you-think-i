@@ -11,21 +11,36 @@ const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const authentication = getAuth();
 
+  // useEffect(() => {
+  //   const auth = getAuth();
+  //   onAuthStateChanged(auth, async (user) => {
+  //     if (user) {
+  //       const uid = user.uid;
+  //       setUserId(uid);
+  //       setLoggedIn(true);
+  //       window.localStorage.setItem("emailForSignIn", user.email);
+  //       const docRef = doc(firestore, "users", uid);
+  //       const docSnap = await getDoc(docRef);
+  //       setUser(docSnap.data());
+  //     } else {
+  //       console.log("There is no user..!");
+  //     }
+  //   });
+  // }, []);
+
   useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const uid = user.uid;
-        setUserId(uid);
-        setLoggedIn(true);
-        window.localStorage.setItem("emailForSignIn", user.email);
-        const docRef = doc(firestore, "users", uid);
-        const docSnap = await getDoc(docRef);
-        setUser(docSnap.data());
-      } else {
-        console.log("There is no user..!");
-      }
+    const unsubscribe = onAuthStateChanged(authentication, async (currentuser) => {
+      setUserId(currentuser.uid);
+      setLoggedIn(true);
+      window.localStorage.setItem("emailForSignIn", user.email);
+      const docRef = doc(firestore, "users", currentuser.uid);
+      const docSnap = await getDoc(docRef);
+      setUser(docSnap.data());
     });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const logout = async () => {

@@ -9,9 +9,9 @@ export default function Footer() {
     <footer className="dark:bg-gray-900 bg-white drop-shadow-2xl">
       <div className="relative max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8 lg:pt-24">
         <div className="absolute top-4 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8">
-          <a
-            className="inline-block p-2 text-teal-300 transition bg-gray-700 rounded-full sm:p-3 lg:p-4 hover:bg-gray-600"
-            href="#MainContent"
+          <div
+            className="inline-block p-2 text-teal-300 transition bg-gray-700 rounded-full sm:p-3 lg:p-4 hover:bg-gray-600 cursor-pointer"
+            onClick={() => window.scrollTo(0, 0)}
           >
             <span className="sr-only">Back to top</span>
 
@@ -27,7 +27,7 @@ export default function Footer() {
                 clipRule="evenodd"
               />
             </svg>
-          </a>
+          </div>
         </div>
 
         <div className="lg:flex lg:items-end lg:justify-between">

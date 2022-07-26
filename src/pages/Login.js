@@ -73,7 +73,7 @@ export default function Login() {
       {alertStatus && (
         <Alert type="warning" close={closeAlertWindow} alert={alert} />
       )}
-      <div className="w-1/2 flex items-center justify-center flex-col">
+      <div className="w-1/2 xs:w-full flex items-center justify-center flex-col">
         <div>
           <div>
             <span className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-200">
@@ -266,7 +266,7 @@ export default function Login() {
           </form>
         </div>
       </div>
-      <div className="w-1/2">
+      <div className="w-1/2 block xs:hidden">
         <img
           src="https://source.unsplash.com/random/?wallpapers"
           alt="Wallpapers"

@@ -147,22 +147,22 @@ export default function Statistics() {
         <p>{question.question}</p>
       </div>
       <div className="flex align-center justify-center py-8">
-        <div class="stats stats-vertical lg:stats-horizontal shadow">
-          <div class="stat place-items-center">
-            <div class="stat-value">{stats?.answeredCount}</div>
-            <div class="stat-title">Users Answered</div>
+        <div className="stats stats-vertical lg:stats-horizontal shadow">
+          <div className="stat place-items-center">
+            <div className="stat-value">{stats?.answeredCount}</div>
+            <div className="stat-title">Users Answered</div>
           </div>
         
-          <div class="stat">
-            <div class="stat-title">New Users</div>
-            <div class="stat-value">4,200</div>
-            <div class="stat-desc">↗︎ 400 (22%)</div>
+          <div className="stat">
+            <div className="stat-title">New Users</div>
+            <div className="stat-value">4,200</div>
+            <div className="stat-desc">↗︎ 400 (22%)</div>
           </div>
         
-          <div class="stat">
-            <div class="stat-title">New Registers</div>
-            <div class="stat-value">1,200</div>
-            <div class="stat-desc">↘︎ 90 (14%)</div>
+          <div className="stat">
+            <div className="stat-title">New Registers</div>
+            <div className="stat-value">1,200</div>
+            <div className="stat-desc">↘︎ 90 (14%)</div>
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function Statistics() {
         <div className="mt-4 flex justify-between">
           {question.answers.map((answer, key) => (
             <div
-              className="flex flex-col justify-start items-center p-10 border-2"
+              className="flex flex-col justify-start items-center p-10 border border-gray-700 rounded-lg"
               key={key}
             >
               <span className="label-text ml-2">{answer.answer}</span>
@@ -199,7 +199,7 @@ export default function Statistics() {
       {statsShow.isShow && (
         <div className="rounded-md my-5 pb-5 border-[1px] border-gray-500">
           <h3 className="text-center font-medium my-6 text-white">
-            {statsData[0].answerText} Statistics View
+            { statsData.length > 0 ? `${statsData[0]?.answerText} Statistics View` : "There are currently no results..."}
           </h3>
           {statsShow.isShow && (
             <div className="flex items-center justify-around">
