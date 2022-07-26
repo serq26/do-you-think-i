@@ -8,13 +8,13 @@ export default function Profile() {
 
   return (
     <div className="container py-20">
-      <div className="grid grid-cols-12 gap-8">
-        <div className="col-start-1 col-end-10">
+      <div className="grid md:grid-cols-12 xs:grid-cols-1 gap-8">
+        <div className="col-start-1 md:col-end-10 xs:col-span-10 md:order-1 xs:order-2">
           <div className="dark:bg-gray-800 bg-gray-100 p-2 rounded-box h-auto relative">
             <Outlet />
           </div>
         </div>
-        <ul className="col-span-2 menu dark:bg-gray-800 bg-gray-100 p-2 rounded-box h-max sticky top-5">
+        <ul className="md:col-span-2 xs:col-span-10 menu dark:bg-gray-800 bg-gray-100 p-2 rounded-box h-max sticky top-5 md:order-2 xs:order-1">
           <li>
             <Link to="/profile" className={location.pathname === "/profile" && "active"}>
               <svg
