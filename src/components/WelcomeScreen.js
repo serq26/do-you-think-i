@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function WelcomeScreen() {
   return (
@@ -16,19 +17,19 @@ export default function WelcomeScreen() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mt-8">
-            <a
+            <Link
               className="block w-full px-12 py-3 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded sm:w-auto active:text-opacity-75 hover:bg-transparent hover:text-white focus:outline-none focus:ring"
-              href="/signin"
+              to="/signin"
             >
               Signin
-            </a>
+            </Link>
 
-            <a
-              className="block w-full px-12 py-3 text-sm font-medium text-white border border-blue-600 rounded sm:w-auto hover:bg-blue-600 active:bg-blue-500 focus:outline-none focus:ring"
-              href="/login"
+            <Link
+              className="block w-full px-12 py-3 text-sm font-medium text-white  bg-blue-600 border border-blue-600 rounded sm:w-auto hover:bg-transparent active:bg-blue-500 focus:outline-none focus:ring"
+              to="/login"
             >
               Login
-            </a>
+            </Link>
           </div>
         </div>
       </div>
