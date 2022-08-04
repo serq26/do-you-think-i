@@ -1,4 +1,4 @@
-Live Demo => <a href="do-you-think-i.vercel.app">do-you-think-i.vercel.app</a>
+Live Demo => <a href="https://do-you-think-i.vercel.app" target="_blank">do-you-think-i.vercel.app</a>
 
 # Getting Started with Create React App
 
