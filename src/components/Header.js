@@ -276,6 +276,7 @@ export default function Header({ userName, setLocale }) {
                   key={item.name}
                   as="a"
                   href={item.href}
+                  style={{ display: item.display }}
                   className={classNames(
                     item.current
                       ? "bg-gray-900 text-white"

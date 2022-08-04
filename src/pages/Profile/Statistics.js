@@ -167,10 +167,10 @@ export default function Statistics() {
         </div>
       </div>
       <div>
-        <div className="mt-4 flex justify-between">
+        <div className="mt-4 flex justify-between xs:flex-col md:flex-row">
           {question.answers.map((answer, key) => (
             <div
-              className="flex flex-col justify-start items-center p-10 border border-gray-700 rounded-lg"
+              className="flex flex-col justify-start items-center p-10 border border-gray-700 rounded-lg xs:mb-2"
               key={key}
             >
               <span className="label-text ml-2">{answer.answer}</span>
@@ -202,7 +202,7 @@ export default function Statistics() {
             { statsData.length > 0 ? `${statsData[0]?.answerText} Statistics View` : "There are currently no results..."}
           </h3>
           {statsShow.isShow && (
-            <div className="flex items-center justify-around">
+            <div className="flex items-center justify-around xs:flex-col md:flex-row">
               {statsData.map((statsObj) => (
                 <StatisticsView
                   key={statsObj.key}

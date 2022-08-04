@@ -181,13 +181,13 @@ export default function EditQuestion() {
                               required
                             />
                             <div
-                              className="tooltip tooltip-right"
+                              className="tooltip md:tooltip-right xs:tooltip-left"
                               data-tip={t("check_true_answer")}
                             >
                               <Field
                                 type="radio"
                                 name={`answers.isCorrect`}
-                                className="radio radio-accent"
+                                className="radio radio-accent md:mr-0 xs:mr-4"
                                 checked={values.answers[index].isCorrect}
                                 onClick={(e) => {
                                   e.target.checked = true;

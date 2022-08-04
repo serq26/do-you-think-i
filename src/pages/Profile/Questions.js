@@ -33,7 +33,7 @@ export default function Questions() {
         My Questions
       </h1>
       
-      <div className="mt-10 grid grid-cols-3 gap-6">
+      <div className="mt-10 grid md:grid-cols-3 xs:grid-cols-1 gap-6">
         {data.pages.length > 0 &&
           data.pages.map((group, i) => (
             <Fragment key={i}>
@@ -56,7 +56,7 @@ export default function Questions() {
                         </li>
                       ))}
                     </ul>
-                    <div className="card-actions justify-end mt-5">
+                    <div className="card-actions md:justify-end xs:justify-center mt-5">
                       <Link to={`statistics/${question.key}`}>
                         <div
                           className="tooltip tooltip-info"

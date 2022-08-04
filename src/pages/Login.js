@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { loginValidations } from "../validations";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, getRedirectResult, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { signinWith } from "../firebase/firebase";
@@ -20,21 +20,52 @@ export default function Login() {
   const [animationParent] = useAutoAnimate();
 
   const handleSignin = async (signInMethod) => {
-    const { user, result, error } = await signinWith(signInMethod);
-    if (user) navigate("/profile", { state: result._tokenResponse });
+    await signinWith(signInMethod);
+    // const { user, result, error } = await signinWith(signInMethod);
+    // if (user) navigate("/profile", { state: result._tokenResponse });
 
-    if (
-      error !== undefined &&
-      error.errorCode === "auth/account-exists-with-different-credential"
-    ) {
-      setAlertStatus(true);
-      setAlert({
-        title: "Login Failed",
-        message:
-          "You have already registered before with another signin methods. Please try logging in with the login method you registered with.",
-      });
-    }
+    // if (
+    //   error !== undefined &&
+    //   error.errorCode === "auth/account-exists-with-different-credential"
+    // ) {
+    //   setAlertStatus(true);
+    //   setAlert({
+    //     title: "Login Failed",
+    //     message:
+    //       "You have already registered before with another signin methods. Please try logging in with the login method you registered with.",
+    //   });
+    // }
   };
+
+  useEffect(() => {
+    const auth = getAuth();
+    getRedirectResult(auth)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+      window.localStorage.setItem("emailForSignIn", user.email);
+
+      if (user) navigate("/profile", { state: result._tokenResponse });
+
+      
+    }).catch((err) => {
+      const errorCode = err.code;
+      const errorMessage = err.message;
+      const error = { errorCode, errorMessage };
+      if (
+        error !== undefined &&
+        error.errorCode === "auth/account-exists-with-different-credential"
+      ) {
+        setAlertStatus(true);
+        setAlert({
+          title: "Login Failed",
+          message:
+            "You have already registered before with another signin methods. Please try logging in with the login method you registered with.",
+        });
+      }
+    });
+  }, []);
 
   const closeAlertWindow = () => {
     setAlertStatus(false);

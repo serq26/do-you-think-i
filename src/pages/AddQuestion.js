@@ -193,7 +193,7 @@ export default function AddQuestion() {
                                 required
                               />
                               <div
-                                className="tooltip tooltip-right"
+                                className="tooltip md:tooltip-right xs:tooltip-left"
                                 data-tip={t("check_true_answer")}
                               >
                                 <Field

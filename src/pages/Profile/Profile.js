@@ -14,7 +14,7 @@ export default function Profile() {
             <Outlet />
           </div>
         </div>
-        <ul className="md:col-span-2 xs:col-span-10 menu dark:bg-gray-800 bg-gray-100 p-2 rounded-box h-max sticky top-5 md:order-2 xs:order-1">
+        <ul className="md:col-span-2 xs:col-span-10 menu dark:bg-gray-800 bg-gray-100 p-2 rounded-box h-max xs:relative md:sticky top-5 md:order-2 xs:order-1">
           <li>
             <Link to="/profile" className={location.pathname === "/profile" && "active"}>
               <svg

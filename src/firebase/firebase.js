@@ -17,6 +17,8 @@ import {
   GithubAuthProvider,
   TwitterAuthProvider,
   onAuthStateChanged,
+  getRedirectResult,
+  signInWithRedirect,
 } from "firebase/auth";
 
 export const signinWith = async (method) => {
@@ -50,21 +52,37 @@ export const signinWith = async (method) => {
       break;
   }
 
-  const data = await signInWithPopup(auth, provider)
-    .then((result) => {
-      const credential = providerInstance(result);
-      const token = credential.accessToken;
-      const user = result.user;
-      window.localStorage.setItem("emailForSignIn", user.email);
-      return { user, result };
-    })
-    .catch((err) => {
-      const errorCode = err.code;
-      const errorMessage = err.message;
-      const error = { errorCode, errorMessage };
-      return { error };
-    });
-  return data;
+  // const data = await signInWithPopup(auth, provider)
+  //   .then((result) => {
+  //     const credential = providerInstance(result);
+  //     const token = credential.accessToken;
+  //     const user = result.user;
+  //     window.localStorage.setItem("emailForSignIn", user.email);
+  //     return { user, result };
+  //   })
+  //   .catch((err) => {
+  //     const errorCode = err.code;
+  //     const errorMessage = err.message;
+  //     const error = { errorCode, errorMessage };
+  //     return { error };
+  //   });
+
+  signInWithRedirect(auth, provider);
+  // getRedirectResult(auth)
+  // .then((result) => {
+  //   const credential = GoogleAuthProvider.credentialFromResult(result);
+  //   const token = credential.accessToken;
+  //   const user = result.user;
+  //   window.localStorage.setItem("emailForSignIn", user.email);
+  //   return { user, result };
+  // }).catch((err) => {
+  //   const errorCode = err.code;
+  //   const errorMessage = err.message;
+  //   const error = { errorCode, errorMessage };
+  //     return { error };
+  // });
+
+  // return data;
 };
 
 export const getQuestions = async ({ queryKey }) => {
